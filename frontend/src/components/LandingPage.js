@@ -31,7 +31,7 @@ import {
 } from 'lucide-react';
 import PendingTasks from './PendingTasks';
 
-const LandingPage = () => {
+const LandingPage = ({ showPendingTasks }) => {
   const [isVisible, setIsVisible] = useState({});
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
@@ -430,9 +430,27 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Pending Tasks Section (Conditionally Rendered) */}
+      {showPendingTasks && (
+        <section id="pending-tasks" className="py-16 bg-gray-800">
+          <div className="max-w-7xl mx-auto px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h2 className="text-3xl font-bold text-center mb-12 text-emerald-400">
+                Tareas Pendientes (Visible en Preview/Dev)
+              </h2>
+              <PendingTasks />
+            </motion.div>
+          </div>
+        </section>
+      )}
+
       {/* Services Section */}
       <section id="services" className="py-24 relative">
-        <motion.div 
+        <motion.div
           style={{ y: y3 }}
           className="absolute inset-0 opacity-10"
         >

@@ -363,7 +363,7 @@ const LandingPage = ({ showPendingTasks, isPreview }) => { // Añadir isPreview 
             muted
             playsInline // Important for iOS and some Android browsers
             className="absolute top-0 left-0 w-full h-full object-cover"
-            src="https://videocdn.cdnpk.net/videos/03f3b8d7-8ee9-497b-bf06-0ef9e1ee18be/horizontal/previews/clear/large.mp4?token=exp=1748790876~hmac=16cde3edcf9aa01cb5ea8c208372083a0cd6f38fc7c4ec922674117526f2b9a4"
+            src="hero-background.mp4"
             type="video/mp4"
           >
             Tu navegador no soporta el tag de video.

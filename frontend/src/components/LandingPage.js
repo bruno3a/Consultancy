@@ -30,13 +30,16 @@ import {
   Settings
 } from 'lucide-react';
 import PendingTasks from './PendingTasks';
-import PreviewBanner from './PreviewBanner'; // Importar el banner
+import PreviewBanner from './PreviewBanner';
 
-const LandingPage = ({ showPendingTasks, isPreview }) => { // Añadir isPreview a las props
+const LandingPage = ({ showPendingTasks, isPreview }) => {
   const [isVisible, setIsVisible] = useState({});
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [isScrolled, setIsScrolled] = useState(false);
+  
+  // Detectar automáticamente el modo preview
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
   
   const { scrollYProgress } = useScroll();
   const y1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
@@ -47,6 +50,33 @@ const LandingPage = ({ showPendingTasks, isPreview }) => { // Añadir isPreview 
     email: '',
     message: ''
   });
+
+  // Detectar modo preview
+  useEffect(() => {
+    // Detectar preview por URL, variable de entorno, o prop
+    const urlParams = new URLSearchParams(window.location.search);
+    const isUrlPreview = urlParams.get('preview') === 'true';
+    const isEnvPreview = process.env.NODE_ENV === 'development';
+    const isPropPreview = isPreview === true;
+    const isEnvVarPreview = process.env.REACT_APP_PREVIEW_MODE === 'true';
+    
+    // También detectar si estamos en localhost
+    const isLocalhost = window.location.hostname === 'localhost' || 
+                       window.location.hostname === '127.0.0.1' ||
+                       window.location.hostname.includes('localhost');
+    
+    setIsPreviewMode(isUrlPreview || isEnvPreview || isPropPreview || isEnvVarPreview || isLocalhost);
+    
+    // Log para debugging
+    console.log('Preview Mode Detection:', {
+      isUrlPreview,
+      isEnvPreview,
+      isPropPreview,
+      isEnvVarPreview,
+      isLocalhost,
+      finalPreviewMode: isUrlPreview || isEnvPreview || isPropPreview || isEnvVarPreview || isLocalhost
+    });
+  }, [isPreview]);
 
   // Navigation items
   const navItems = [
@@ -216,7 +246,7 @@ const LandingPage = ({ showPendingTasks, isPreview }) => { // Añadir isPreview 
         transition={{ duration: 0.6 }}
         className={`fixed top-0 w-full z-50 transition-all duration-300 focus:outline-none ${
           isScrolled 
-            ? 'bg-gray-900/95 backdrop-blur-xl border-b border-gray-600 shadow-lg shadow-gray-900/20'  // Cambiado color del borde para el divisor
+            ? 'bg-gray-900/95 backdrop-blur-xl border-b border-gray-600 shadow-lg shadow-gray-900/20'
             : 'bg-transparent'
         }`}
       >
@@ -227,11 +257,11 @@ const LandingPage = ({ showPendingTasks, isPreview }) => { // Añadir isPreview 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent cursor-pointer flex items-center" // Añadido flex e items-center
+              className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent cursor-pointer flex items-center gap-3"
               onClick={() => scrollToSection('hero')}
             >
               <span>FlujoDigital</span>
-              {isPreview && <PreviewBanner />} {/* Mostrar banner aquí si es preview */}
+              {isPreviewMode && <PreviewBanner />}
             </motion.div>
 
             {/* Desktop Navigation */}
@@ -243,10 +273,10 @@ const LandingPage = ({ showPendingTasks, isPreview }) => { // Añadir isPreview 
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 * index }}
                   onClick={() => scrollToSection(item.id)}
-                  className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 group focus:outline-none border ${ // Añadido 'border' base
+                  className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 group focus:outline-none border ${
                     activeSection === item.id
                       ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-800/50 bg-transparent border-transparent' // bg-transparent y border-transparent para estado inactivo
+                      : 'text-gray-300 hover:text-white hover:bg-gray-800/50 bg-transparent border-transparent'
                   }`}
                 >
                   {item.icon && (
@@ -310,10 +340,10 @@ const LandingPage = ({ showPendingTasks, isPreview }) => { // Añadir isPreview 
                   }}
                   transition={{ delay: isMenuOpen ? 0.1 * index : 0 }}
                   onClick={() => scrollToSection(item.id)}
-                  className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-300 flex items-center space-x-3 focus:outline-none border ${ // Añadido 'border' base
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-300 flex items-center space-x-3 focus:outline-none border ${
                     activeSection === item.id
                       ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-800/50 bg-transparent border-transparent' // bg-transparent y border-transparent para estado inactivo
+                      : 'text-gray-300 hover:text-white hover:bg-gray-800/50 bg-transparent border-transparent'
                   }`}
                 >
                   {item.icon && (
@@ -387,10 +417,10 @@ const LandingPage = ({ showPendingTasks, isPreview }) => { // Añadir isPreview 
             className="text-5xl md:text-7xl font-bold mb-8 leading-tight"
           >
             <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
-              Mejoramos cómo trabajan
+              Te acompañamos en la
             </span>
             <br />
-            <span className="text-white drop-shadow-lg">negocios como el tuyo</span>
+            <span className="text-white drop-shadow-lg">Digitalización de tu Negocio</span>
           </motion.h1>
           
           <motion.p 
@@ -744,7 +774,9 @@ const LandingPage = ({ showPendingTasks, isPreview }) => { // Añadir isPreview 
                 FlujoDigital
               </h3>
               <p className="text-gray-400 leading-relaxed">
-                Transformamos pequeños negocios con tecnología accesible y efectiva que impulsa el crecimiento.
+                Transformamos tu negocio con tecnología accesible y efectiva que impulsa el crecimiento.
+                <br />
+                Te ayudamos a resolver las barreras tecnológicas.
               </p>
             </div>
             
@@ -752,7 +784,6 @@ const LandingPage = ({ showPendingTasks, isPreview }) => { // Añadir isPreview 
               <h4 className="text-white font-semibold mb-6">Servicios</h4>
               <ul className="space-y-3 text-gray-400">
                 <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Automatización</li>
-                <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Integración</li>
                 <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Facturación Digital</li>
                 <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Consultoría</li>
               </ul>
@@ -761,8 +792,6 @@ const LandingPage = ({ showPendingTasks, isPreview }) => { // Añadir isPreview 
             <div>
               <h4 className="text-white font-semibold mb-6">Empresa</h4>
               <ul className="space-y-3 text-gray-400">
-                <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Sobre nosotros</li>
-                <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Blog</li>
                 <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Casos de éxito</li>
                 <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Contacto</li>
               </ul>
@@ -779,7 +808,7 @@ const LandingPage = ({ showPendingTasks, isPreview }) => { // Añadir isPreview 
           </div>
           
           <div className="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 FlujoDigital. Todos los derechos reservados.</p>
+            <p>&copy; 2025 FlujoDigital. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>

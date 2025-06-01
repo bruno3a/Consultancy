@@ -189,7 +189,7 @@ const LandingPage = () => {
     {
       icon: <Users className="w-12 h-12" />,
       title: "Profesionales Independientes",
-      description: "Médicos, diseñadores, contadores y consultores que buscan optimizar su tiempo",
+      description: "Profesionales de la salud, y servicios en general que buscan optimizar su tiempo",
       features: ["Gestión de clientes", "Facturación automática", "Agenda digital"]
     },
     {
@@ -202,7 +202,7 @@ const LandingPage = () => {
       icon: <Smartphone className="w-12 h-12" />,
       title: "Emprendedores Digitales",
       description: "Vendedores de Instagram, Tiendanube, Mercado Libre en crecimiento",
-      features: ["Automatización de ventas", "Reportes inteligentes", "Escalabilidad"]
+      features: ["Chatbots", "Facturación automática", "Reportes inteligentes"]
     }
   ];
 

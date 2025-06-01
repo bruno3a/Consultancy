@@ -29,6 +29,7 @@ import {
   Eye,
   Settings
 } from 'lucide-react';
+import PendingTasksViewer from './PendingTasks'; // Corrected import name
 
 const LandingPage = () => {
   const [isVisible, setIsVisible] = useState({});
@@ -387,7 +388,7 @@ const LandingPage = () => {
               Mejoramos cómo trabajan
             </span>
             <br />
-            <span className="text-white drop-shadow-lg">los pequeños negocios</span>
+            <span className="text-white drop-shadow-lg">negocios como el tuyo</span>
           </motion.h1>
           
           <motion.p 
@@ -423,7 +424,7 @@ const LandingPage = () => {
               onClick={handleDemoClick}
               className="border-2 border-gray-500 px-8 py-4 rounded-full text-lg font-semibold hover:border-emerald-400 hover:bg-emerald-400/10 transition-all duration-300 flex items-center justify-center min-w-[200px]"
             >
-              Ver demo gratuita
+              Conocé lo que hacemos
             </motion.button>
           </motion.div>
         </div>
@@ -793,6 +794,9 @@ const LandingPage = () => {
       >
         <MessageSquare className="w-6 h-6" />
       </motion.button>
+
+      {/* Visor de Tareas Pendientes (para desarrollo/recordatorio) */}
+      <PendingTasksViewer />
     </div>
   );
 };

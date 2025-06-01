@@ -257,10 +257,10 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent cursor-pointer flex items-center gap-3"
+              className="cursor-pointer flex items-center"
               onClick={() => scrollToSection('hero')}
             >
-              <span>FlujoDigital</span>
+              <img src="/logo.png" alt="Logo" className="h-10 w-auto" />
               {isPreviewMode && <PreviewBanner />}
             </motion.div>
 

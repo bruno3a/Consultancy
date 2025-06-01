@@ -6,7 +6,7 @@ import PreviewBanner from './components/PreviewBanner.js';
 import "./App.css";
 
 function App() {
-  const isPreview = process.env.REACT_APP_VERCEL_ENV === 'preview';
+  const isPreview = process.env.REACT_APP_VERCEL_ENV === 'preview' || process.env.NODE_ENV === 'development';
   const isProduction = process.env.REACT_APP_VERCEL_ENV === 'production';
 
   return (

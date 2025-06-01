@@ -1,0 +1,11 @@
+/* Optimización de carga de fuentes */
+@font-face {
+    font-family: 'MiFuente';
+    src: url('/fonts/fuente.woff2') format('woff2');
+    font-display: swap;
+}
+
+/* CSS crítico inline, resto cargado de forma asíncrona */
+.critical-styles {
+    /* Estilos críticos above-the-fold */
+}

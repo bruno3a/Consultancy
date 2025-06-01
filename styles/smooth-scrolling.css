@@ -1,0 +1,27 @@
+/* Eliminar destellos en transiciones */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Optimizar transiciones para GPU */
+.smooth-element {
+    will-change: transform, opacity;
+    transform: translateZ(0); /* Forzar aceleración por hardware */
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Transiciones suaves sin destellos */
+.button, .nav-item, .card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
+    will-change: transform, opacity;
+}
+
+/* Evitar repaints innecesarios */
+.scroll-element {
+    contain: layout style paint;
+    transform: translate3d(0, 0, 0);
+}

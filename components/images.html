@@ -1,0 +1,13 @@
+<!-- Imágenes optimizadas -->
+<img src="/images/imagen-optimizada.webp" 
+     alt="Descripción específica y relevante de la imagen"
+     width="800" 
+     height="600"
+     loading="lazy">
+
+<!-- Imágenes responsivas -->
+<picture>
+    <source media="(max-width: 768px)" srcset="/images/mobile.webp">
+    <source media="(max-width: 1200px)" srcset="/images/tablet.webp">
+    <img src="/images/desktop.webp" alt="Descripción de la imagen">
+</picture>

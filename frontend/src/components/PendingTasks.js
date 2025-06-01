@@ -5,7 +5,8 @@ const PENDING_TASKS = [
   "Actualizar URLs con el dominio real (Open Graph, Twitter, Canonical) en `frontend/public/index.html`.",
   "Crear y añadir `og-image.png` en `frontend/public/` para Open Graph y Twitter.",
   "Revisar y configurar `preload` para fuentes y CSS crítico (actualmente comentado en `frontend/public/index.html`).",
-  "Asegurar que el `Sitemap` en `robots.txt` apunte al dominio real."
+  "Asegurar que el `Sitemap` en `robots.txt` apunte al dominio real.",
+  "Actualizar contenido de servicios ofrecidos"
 ];
 
 const PendingTasksViewer = () => {

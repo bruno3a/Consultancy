@@ -29,7 +29,7 @@ import {
   Eye,
   Settings
 } from 'lucide-react';
-import PendingTasksViewer from './PendingTasks'; // Corrected import name
+import PendingTasks from './PendingTasks';
 
 const LandingPage = () => {
   const [isVisible, setIsVisible] = useState({});
@@ -796,7 +796,7 @@ const LandingPage = () => {
       </motion.button>
 
       {/* Visor de Tareas Pendientes (para desarrollo/recordatorio) */}
-      <PendingTasksViewer />
+      <PendingTasks />
     </div>
   );
 };

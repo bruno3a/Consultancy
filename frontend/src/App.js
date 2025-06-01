@@ -23,8 +23,6 @@ function App() {
               />
             }
           />
-          {/* Si PendingTasks es una ruta separada y no parte de LandingPage: */}
-          {/* {!isProduction && <Route path="/pending-tasks" element={<PendingTasks />} />} */}
         </Routes>
       </BrowserRouter>
     </div>

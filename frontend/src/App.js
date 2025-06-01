@@ -11,14 +11,15 @@ function App() {
 
   return (
     <div className="App">
-      {isPreview && <PreviewBanner />}
+      {/* PreviewBanner se renderizará dentro de LandingPage ahora */}
       <BrowserRouter>
         <Routes>
           <Route
             path="/"
             element={
               <LandingPage
-                showPendingTasks={!isProduction} // Pasa como prop si LandingPage debe mostrar PendingTasks
+                showPendingTasks={!isProduction}
+                isPreview={isPreview} // Pasamos isPreview como prop
               />
             }
           />

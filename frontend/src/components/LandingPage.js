@@ -30,8 +30,9 @@ import {
   Settings
 } from 'lucide-react';
 import PendingTasks from './PendingTasks';
+import PreviewBanner from './PreviewBanner'; // Importar el banner
 
-const LandingPage = ({ showPendingTasks }) => {
+const LandingPage = ({ showPendingTasks, isPreview }) => { // Añadir isPreview a las props
   const [isVisible, setIsVisible] = useState({});
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
@@ -226,10 +227,11 @@ const LandingPage = ({ showPendingTasks }) => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent cursor-pointer"
+              className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent cursor-pointer flex items-center" // Añadido flex e items-center
               onClick={() => scrollToSection('hero')}
             >
-              FlujoDigital
+              <span>FlujoDigital</span>
+              {isPreview && <PreviewBanner />} {/* Mostrar banner aquí si es preview */}
             </motion.div>
 
             {/* Desktop Navigation */}

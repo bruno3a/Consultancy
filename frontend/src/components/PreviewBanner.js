@@ -1,24 +1,20 @@
 import React from 'react';
 
 const PreviewBanner = () => {
-  const bannerStyle = {
-    backgroundColor: '#ffcc00', // Un amarillo para destacar
-    color: '#333',
-    padding: '10px',
-    textAlign: 'center',
-    fontSize: '14px',
-    fontWeight: 'bold',
-    position: 'fixed', // Para que se mantenga visible
-    top: 0,
-    left: 0,
-    width: '100%',
-    zIndex: 1000, // Para que esté por encima de otros elementos
+  const textStyle = {
+    color: '#fcd34d', // Tailwind amber-300
+    fontSize: '0.75rem', // text-xs
+    fontWeight: '600', // font-semibold
+    marginLeft: '1rem', // ml-4
+    padding: '0.25rem 0.5rem', // py-1 px-2
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    borderRadius: '0.25rem', // rounded-sm
   };
 
   return (
-    <div style={bannerStyle}>
-      ESTÁS VIENDO UNA VERSIÓN DE VISTA PREVIA (PREVIEW)
-    </div>
+    <span style={textStyle}>
+      Modo Preview
+    </span>
   );
 };
 

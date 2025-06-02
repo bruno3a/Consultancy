@@ -252,15 +252,17 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
       >
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
-            {/* Logo */}
+            {/* Logo y nombre "FlujoDigital" a la derecha */}
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="cursor-pointer flex items-center"
-              onClick={() => scrollToSection('hero')}
+              // se puede eliminar el space-x-3 de classname
+                            className="cursor-pointer flex items-center space-x-3"
+                            onClick={() => scrollToSection('hero')}
             >
               <img src="/logo.png" alt="Logo" className="h-10 w-auto" />
+              <span className="text-xl font-semibold text-white">FlujoDigital</span> {/* se puede eliminar esta línea para quitar el texto */}
               {isPreviewMode && <PreviewBanner />}
             </motion.div>
 

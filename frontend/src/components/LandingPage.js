@@ -149,18 +149,17 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
     setFormData({ email: '', message: '' });
   };
 
-  const handleDemoClick = () => {
-    alert('Demo próximamente disponible');
-  };
+const handleDemoClick = () => {
+  document.getElementById('services').scrollIntoView({ behavior: 'smooth' });
+};
 
   const handleWhatsAppClick = () => {
-    window.open('https://wa.me/5491123456789?text=Hola,%20me%20interesa%20conocer%20más%20sobre%20sus%20servicios', '_blank');
+window.open('https://wa.me/5491171299730?text=Hola,%20me%20interesa%20conocer%20más%20sobre%20sus%20servicios', '_blank');
   };
 
-  const handleServiceCTA = (serviceName) => {
-    const message = `Hola, me interesa conocer más sobre ${serviceName}. ¿Podemos agendar una consulta?`;
-    window.open(`https://wa.me/5491123456789?text=${encodeURIComponent(message)}`, '_blank');
-  };
+const handleEmailClick = () => {
+  window.open('mailto:info@flujodigital.com.ar', '_blank');
+};
 
   const services = [
     {
@@ -697,8 +696,8 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
 
               <div className="space-y-6 mb-8">
                 {[
-                  { icon: <Phone className="w-5 h-5" />, text: "+54 11 2345-6789" },
-                  { icon: <Mail className="w-5 h-5" />, text: "hola@digitalflow.com.ar" },
+                  { icon: <Phone className="w-5 h-5" />, text: "+54 911 7129 9730" },
+                  { icon: <Mail className="w-5 h-5 cursor-pointer" onClick={handleEmailClick} />, text:<span className="cursor-pointer" onClick={handleEmailClick}> br1trezza@gmail.com</span>},
                   { icon: <MapPin className="w-5 h-5" />, text: "Buenos Aires, Argentina" }
                 ].map((contact, index) => (
                   <motion.div

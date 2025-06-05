@@ -31,6 +31,9 @@ import {
 } from 'lucide-react';
 import PendingTasks from './PendingTasks';
 import PreviewBanner from './PreviewBanner';
+import PrivacyPolicyPopup from './PrivacyPolicyPopup'; // Importar el nuevo componente
+import TermsOfUsePopup from './TermsOfUsePopup'; // Importar el nuevo componente de Términos de Uso
+import CookieConsentBanner from './CookieConsentBanner'; // Importar el banner de cookies
 
 const LandingPage = ({ showPendingTasks, isPreview }) => {
   const [isVisible, setIsVisible] = useState({});
@@ -39,6 +42,7 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   
   // Detectar automáticamente el modo preview
+  // La prop `showPendingTasks` podría ser redundante si `isPreview` ya está configurada correctamente.
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   
   const { scrollYProgress } = useScroll();
@@ -50,6 +54,9 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
     email: '',
     message: ''
   });
+
+  // Estado para gestionar el popup activo ('privacy-policy', 'terms-of-use', o null)
+  const [activePopup, setActivePopup] = useState(null);
 
   // Detectar modo preview
   useEffect(() => {
@@ -111,6 +118,27 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Efecto para manejar la visibilidad de los popups vía URL
+  useEffect(() => {
+    const handlePopupFromUrl = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const showParam = urlParams.get('show');
+      // Solo activa popups conocidos para evitar abrir modales no deseados
+      if (showParam === 'privacy-policy' || showParam === 'terms-of-use') {
+        setActivePopup(showParam);
+      } else if (activePopup && !showParam) { // Si había un popup activo y el param se quitó
+        setActivePopup(null);
+      }
+    };
+
+    handlePopupFromUrl(); // Comprobar al montar
+    window.addEventListener('popstate', handlePopupFromUrl); // Escuchar cambios en el historial
+    return () => window.removeEventListener('popstate', handlePopupFromUrl);
+  }, [activePopup]); // Re-ejecutar si activePopup cambia para asegurar consistencia si se cierra programáticamente
+
+
+
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -159,6 +187,21 @@ window.open('https://wa.me/5491171299730?text=Hola,%20me%20interesa%20conocer%20
 
 const handleEmailClick = () => {
   window.open('mailto:info@flujodigital.com.ar', '_blank');
+};
+
+// Funciones para controlar los popups
+const openPopup = (popupName) => {
+  const url = new URL(window.location);
+  url.searchParams.set('show', popupName);
+  window.history.pushState({ path: url.toString() }, '', url.toString());
+  setActivePopup(popupName);
+};
+
+const closePopup = () => {
+  const url = new URL(window.location);
+  url.searchParams.delete('show');
+  window.history.replaceState({ path: url.toString() }, '', url.toString());
+  setActivePopup(null);
 };
 
   const services = [
@@ -497,17 +540,28 @@ const handleEmailClick = () => {
                 animate={isVisible.services ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.8, delay: index * 0.1 }}
                 whileHover={{ y: -10, scale: 1.02 }}
-                className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 h-full"
+                className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm p-8 rounded-2xl border border-gray-700/50 hover:border-emerald-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10 h-full flex flex-col justify-between relative"
               >
-                <div className="text-emerald-400 mb-6 flex justify-center">
-                  {service.icon}
+                <div>
+                  <div className="text-emerald-400 mb-6 flex justify-center">
+                    {service.icon}
+                  </div>
+                  <h3 className="text-xl font-semibold mb-4 text-white text-center">
+                    {service.title}
+                  </h3>
+                  <p className="text-gray-300 leading-relaxed text-center">
+                    {service.description}
+                  </p>
                 </div>
-                <h3 className="text-xl font-semibold mb-4 text-white text-center">
-                  {service.title}
-                </h3>
-                <p className="text-gray-300 leading-relaxed text-center">
-                  {service.description}
-                </p>
+                {service.title === "Chatbots con IA" && (
+                  <button
+                    className="absolute top-[-1rem] right-[-0.5rem] bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-xl transition-colors duration-300 shadow-lg flex items-center space-x-2"
+                    onClick={handleWhatsAppClick} // Reutilizamos la función existente
+                  >
+                    <MessageSquare size={18} className="opacity-90" />
+                    <span>Interactuá!</span>
+                  </button>
+                )}
               </motion.div>
             ))}
           </div>
@@ -558,7 +612,8 @@ const handleEmailClick = () => {
                 {[
                   { icon: <Clock className="w-5 h-5" />, text: "Ahorra hasta 5 horas semanales" },
                   { icon: <CheckCircle className="w-5 h-5" />, text: "Reduce errores de facturación al 99%" },
-                  { icon: <Target className="w-5 h-5" />, text: "Mayor comodidad y control" }
+                  { icon: <Target className="w-5 h-5" />, text: "Mayor comodidad y control" },
+                  { icon: <Users className="w-5 h-5" />, text: "Gestión de clientes" }
                 ].map((benefit, index) => (
                   <motion.div
                     key={index}
@@ -579,7 +634,7 @@ const handleEmailClick = () => {
                 onClick={handleDemoClick}
                 className="bg-gradient-to-r from-teal-500 to-emerald-600 px-8 py-4 rounded-full text-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center"
               >
-                Probar demo
+                Consultar
                 <ArrowRight className="ml-2 w-5 h-5" />
               </motion.button>
             </motion.div>
@@ -592,11 +647,11 @@ const handleEmailClick = () => {
               style={{ y: y3 }}
             >
               <div className="bg-gradient-to-br from-emerald-500/20 to-teal-500/20 backdrop-blur-sm p-8 rounded-3xl border border-emerald-500/30 max-w-md">
-                <img 
-                  src="https://images.unsplash.com/photo-1694903089438-bf28d4697d9a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwzfHxidXNpbmVzcyUyMGF1dG9tYXRpb258ZW58MHx8fGJsdWV8MTc0ODczMjc3M3ww&ixlib=rb-4.1.0&q=85"
-                  alt="Facturación Digital"
-                  className="w-full h-auto rounded-2xl"
-                />
+              <img 
+                src="/FacturIA.png"
+                alt="Facturación Digital"
+                className="w-full h-auto rounded-2xl"
+              />
               </div>
             </motion.div>
           </div>
@@ -801,15 +856,23 @@ const handleEmailClick = () => {
             <div>
               <h4 className="text-white font-semibold mb-6">Legal</h4>
               <ul className="space-y-3 text-gray-400">
-                <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Términos de uso</li>
-                <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Política de privacidad</li>
-                <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Cookies</li>
+                <li className="hover:text-emerald-400 transition-colors duration-300">
+                  <button onClick={() => openPopup('terms-of-use')} className="cursor-pointer text-center w-full focus:outline-none">Términos de uso</button>
+                </li>
+                <li className="hover:text-emerald-400 transition-colors duration-300">
+                  <button onClick={() => openPopup('privacy-policy')} className="cursor-pointer text-center w-full focus:outline-none">Política de privacidad</button>
+                </li>
+                <li className="hover:text-emerald-400 transition-colors duration-300">
+                  <button onClick={() => alert('Página de Cookies pendiente.')} className="cursor-pointer text-center w-full focus:outline-none">Cookies</button>
+                </li>
               </ul>
             </div>
           </div>
           
           <div className="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 FlujoDigital. Todos los derechos reservados.</p>
+            <p className="text-sm">
+              &copy; 2025 FlujoDigital. Todos los derechos reservados. <span className="mx-2">|</span> Diseño e implementación Web por <span className="italic text-emerald-400">FlujoDigital</span>
+            </p>
           </div>
         </div>
       </footer>
@@ -828,7 +891,14 @@ const handleEmailClick = () => {
       </motion.button>
 
       {/* Visor de Tareas Pendientes (para desarrollo/recordatorio) */}
-      {isPreview && <PendingTasks />}
+      {isPreviewMode && <PendingTasks />}
+
+      {/* Popups */}
+      {activePopup === 'privacy-policy' && <PrivacyPolicyPopup onClose={closePopup} />}
+      {activePopup === 'terms-of-use' && <TermsOfUsePopup onClose={closePopup} />}
+
+      {/* Banner de Consentimiento de Cookies */}
+      <CookieConsentBanner onOpenPrivacyPolicy={() => openPopup('privacy-policy')} />
     </div>
   );
 };

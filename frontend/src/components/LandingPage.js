@@ -34,6 +34,7 @@ import PreviewBanner from './PreviewBanner';
 import PrivacyPolicyPopup from './PrivacyPolicyPopup'; // Importar el nuevo componente
 import TermsOfUsePopup from './TermsOfUsePopup'; // Importar el nuevo componente de Términos de Uso
 import CookieConsentBanner from './CookieConsentBanner'; // Importar el banner de cookies
+import { initializeAcceptedTrackingScripts } from '../utils/scriptManager'; // Importar para inicialización
 
 const LandingPage = ({ showPendingTasks, isPreview }) => {
   const [isVisible, setIsVisible] = useState({});
@@ -84,6 +85,12 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
       finalPreviewMode: isUrlPreview || isEnvPreview || isPropPreview || isEnvVarPreview || isLocalhost
     });
   }, [isPreview]);
+
+  // Inicializar scripts de seguimiento si ya hay consentimiento al cargar la página
+  useEffect(() => {
+    initializeAcceptedTrackingScripts();
+  }, []);
+
 
   // Navigation items
   const navItems = [

@@ -90,8 +90,13 @@ const PrivacyPolicyPopup = ({ onClose }) => {
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 bg-gray-900 bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-[100] p-4 transition-opacity duration-300 ease-in-out"
+    <div 
+         className="fixed inset-0 bg-gray-900 bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-[100] p-4 transition-opacity duration-300 ease-in-out"
          onClick={onClose} // Close on overlay click
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="privacy-policy-title"
+         // aria-describedby="privacy-policy-description" // Opcional si la introducción sirve como descripción
     >
       <div 
         className="bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative border border-gray-700 text-gray-300 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
@@ -99,13 +104,13 @@ const PrivacyPolicyPopup = ({ onClose }) => {
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-emerald-400 transition-colors p-2 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="absolute top-4 right-4 text-gray-500 hover:text-emerald-400 transition-colors p-2 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 z-10"
           aria-label="Cerrar política de privacidad"
         >
           <X size={24} />
         </button>
         
-        <h2 className="text-2xl sm:text-3xl font-bold text-emerald-400 mb-3">{policyData.title}</h2>
+        <h2 id="privacy-policy-title" className="text-2xl sm:text-3xl font-bold text-emerald-400 mb-3">{policyData.title}</h2>
         <p className="text-xs text-gray-400 mb-6 italic">Última actualización: {policyData.lastUpdated}</p>
         
         <p className="mb-6 leading-relaxed">{policyData.introduction}</p>

@@ -1,0 +1,85 @@
+/* Contenedor principal para el chat y el botón de lanzamiento */
+.chat-widget-container {
+  position: fixed;
+  bottom: 96px; /* Ajustado para estar encima del botón de WhatsApp */
+  right: 20px;
+  z-index: 1000; /* Asegurar que esté por encima de otros elementos */
+}
+
+/* Botón para abrir el chat */
+.chat-launcher-button {
+  background-color: #10b981; /* Verde esmeralda */
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.chat-launcher-button:hover {
+  background-color: #059669; /* Verde esmeralda más oscuro */
+  transform: scale(1.1);
+}
+
+/* Contenedor del chat cuando está abierto */
+.chat-window {
+  width: 350px; /* Ancho del chat */
+  height: 500px; /* Alto del chat */
+  border-radius: 10px;
+  overflow: hidden; /* Para que los bordes redondeados afecten al MainContainer */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  background-color: #2d3748; /* Un gris oscuro, ajusta según tu tema */
+}
+
+/* Ajustes para el Chat UI Kit dentro de nuestra ventana */
+.chat-window .cs-main-container {
+  border-radius: 10px; /* Heredar o aplicar border-radius */
+  border: none; /* Quitar bordes por defecto si los tuviera */
+}
+
+.chat-window .cs-conversation-header {
+  background-color: #047857; /* Un verde más oscuro para mejor contraste */
+}
+.chat-window .cs-conversation-header__user-name{
+  color: #2b0a0a; /* Rojo oscuro para mejor contraste */
+}
+.chat-window .cs-conversation-header__info{
+  color: #05bd14; /* Verde para mejor contraste */
+}
+.chat-window .cs-message-input {
+  border-top: 1px solid #4a5568; /* Separador sutil */
+}
+.chat-window .cs-message-input__content-editor,
+.chat-window .cs-message-input__toolbox {
+  background-color: #ffffff; /* Fondo del input */
+  color: rgb(8, 2, 2);
+}
+.chat-window .cs-button--send .cs-button__icon svg path {
+    fill: #078a5e; /* Color del icono de enviar */
+}
+
+/* Para los mensajes */
+.chat-window .cs-message--incoming .cs-message__content {
+  background-color: #344154; /* Gris más oscuro para mensajes entrantes */
+  color: white;
+}
+.chat-window .cs-message--outgoing .cs-message__content {
+  background-color: #059669; /* Verde más oscuro para mejor contraste */
+  color: #ffffff; /* Blanco para mejor contraste */
+}
+
+/* Para el TypingIndicator */
+.chat-window .cs-typing-indicator {
+    background-color: #2d3748; /* Fondo del área de mensajes */
+}
+.chat-window .cs-typing-indicator__text {
+    color: #d1d5db; /* Color más claro para mejor contraste */
+}

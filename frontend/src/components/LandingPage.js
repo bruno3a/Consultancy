@@ -8,7 +8,7 @@ import {
   Shield, 
   Users, 
   Store, 
-  Smartphone,
+  Smartphone, 
   ArrowRight,
   CheckCircle,
   Clock,
@@ -36,6 +36,21 @@ import TermsOfUsePopup from './TermsOfUsePopup'; // Importar el nuevo componente
 import CookieConsentBanner from './CookieConsentBanner'; // Importar el banner de cookies
 import { initializeAcceptedTrackingScripts } from '../utils/scriptManager'; // Importar para inicialización
 
+import {
+  MainContainer,
+  ChatContainer,
+  MessageList,
+  Message,
+  MessageInput,
+  Avatar,
+  TypingIndicator,
+  ConversationHeader,
+  Button
+} from '@chatscope/chat-ui-kit-react';
+import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
+import './ChatScopeStyles.css'; // Nuestros estilos personalizados para el contenedor del chat
+import ChatErrorBoundary from './ChatErrorBoundary'; // Importar el ErrorBoundary
+
 const LandingPage = ({ showPendingTasks, isPreview }) => {
   const [isVisible, setIsVisible] = useState({});
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -58,6 +73,14 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
 
   // Estado para gestionar el popup activo ('privacy-policy', 'terms-of-use', o null)
   const [activePopup, setActivePopup] = useState(null);
+
+  // Estados para el Chat con @chatscope/chat-ui-kit-react
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [isBotTyping, setIsBotTyping] = useState(false);
+
+  // IMPORTANTE: Reemplaza esta URL con la URL de tu webhook de n8n
+  const N8N_CHATBOT_WEBHOOK_URL = process.env.REACT_APP_N8N_CHATBOT_WEBHOOK_URL || 'TU_N8N_WEBHOOK_URL_POR_DEFECTO_AQUI';
 
   // Detectar modo preview
   useEffect(() => {
@@ -89,8 +112,21 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
   // Inicializar scripts de seguimiento si ya hay consentimiento al cargar la página
   useEffect(() => {
     initializeAcceptedTrackingScripts();
-  }, []);
 
+    // Mensaje de bienvenida inicial para el chat
+    // Se añade solo si no hay mensajes (ej. al cargar la página por primera vez)
+    if (chatMessages.length === 0) {
+      // Esta lógica de bienvenida podría ser condicional o incluso eliminarse
+      // si el ErrorBoundary se activa antes de que el chat pueda inicializarse completamente.
+        setChatMessages([
+          {
+            message: "¡Hola! Represento a NeuraSur. Contame qué necesitás.",
+            sender: "NeuraSurBot",
+            direction: "incoming",
+          }
+        ]);
+    }
+  }, [chatMessages.length]); // Se ejecuta si chatMessages.length cambia, para evitar múltiples bienvenidas.
 
   // Navigation items
   const navItems = [
@@ -210,6 +246,65 @@ const closePopup = () => {
   window.history.replaceState({ path: url.toString() }, '', url.toString());
   setActivePopup(null);
 };
+
+  // Manejador para enviar mensajes del chat a n8n
+  const handleChatSend = async (textContent) => {
+    const newUserMessage = {
+      message: textContent,
+      sender: "user",
+      direction: "outgoing",
+    };
+    setChatMessages(prevMessages => [...prevMessages, newUserMessage]);
+    setIsBotTyping(true);
+
+    try {
+      // Generar un ID de usuario simple si no existe, para mantener contexto en n8n
+      let userId = localStorage.getItem('chat_user_id');
+      if (!userId) {
+        userId = `user_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+        localStorage.setItem('chat_user_id', userId);
+      }
+
+      const response = await fetch(N8N_CHATBOT_WEBHOOK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: textContent, userId: userId })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('Error en la respuesta del webhook de n8n:', response.status, errorData);
+        throw new Error(`Error del servidor: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      const botReplyText = responseData.reply || responseData.answer || responseData.text || (responseData.data && responseData.data.text) || "No he podido entender tu solicitud en este momento.";
+
+      const newBotMessage = {
+        message: botReplyText,
+        sender: "NeuraSurBot",
+        direction: "incoming",
+        // avatar: <Avatar src="/logo.png" name="NeuraSurBot" /> // Avatar en cada mensaje (opcional)
+      };
+      setChatMessages(prevMessages => [...prevMessages, newBotMessage]);
+
+    } catch (error) {
+      console.error('Error al enviar mensaje a n8n o procesar respuesta:', error);
+      const errorMessage = {
+        message: "En este momento me estoy entrenando para responderte de la mejor manera!",
+        sender: "NeuraSurBot",
+        direction: "incoming",
+      };
+      setChatMessages(prevMessages => [...prevMessages, errorMessage]);
+    } finally {
+      setIsBotTyping(false);
+    }
+  };
+
+  // Logo para el avatar del bot
+  const botAvatar = <Avatar src="/logo.png" name="NeuraSurBot" size="md" />;
 
   const services = [
     {
@@ -566,7 +661,7 @@ const closePopup = () => {
                 {service.title === "Chatbots con IA" && (
                   <button
                     className="absolute top-[-1rem] right-[-0.5rem] bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded-xl transition-colors duration-300 shadow-lg flex items-center space-x-2"
-                    onClick={handleWhatsAppClick} // Reutilizamos la función existente
+                    onClick={() => setIsChatOpen(true)} // Cambiado para abrir el chat interno
                   >
                     <MessageSquare size={18} className="opacity-90" />
                     <span>Interactuá!</span>
@@ -895,9 +990,13 @@ const closePopup = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={handleWhatsAppClick}
-        className="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50 hover:shadow-green-500/25"
+        className="fixed bottom-6 right-6 bg-green-100 hover:bg-green-300 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50 hover:shadow-green-300/25"
       >
-        <MessageSquare className="w-6 h-6" />
+        {/* Reemplaza MessageSquare con tu ícono de WhatsApp */}
+        {/* Asegúrate de que el archivo whatsapp-logo.svg o .png esté en la carpeta public */}
+        <img src="/whatsapp-logo.png" alt="WhatsApp" className="w-7 h-7" /> 
+        {/* Si usas PNG y necesitas ajustar el tamaño, puedes hacerlo aquí. 
+            Si el SVG tiene su propio tamaño, podrías no necesitar w-7 h-7 */}
       </motion.button>
 
       {/* Visor de Tareas Pendientes (para desarrollo/recordatorio) */}
@@ -909,6 +1008,54 @@ const closePopup = () => {
 
       {/* Banner de Consentimiento de Cookies */}
       <CookieConsentBanner onOpenPrivacyPolicy={() => openPopup('privacy-policy')} />
+
+      {/* Chat con @chatscope/chat-ui-kit-react */}
+      <ChatErrorBoundary>
+        <div className="chat-widget-container">
+          {!isChatOpen && (
+            <motion.button
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 1, duration: 0.5, type: "spring" }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setIsChatOpen(true)}
+              className="chat-launcher-button"
+              aria-label="Abrir chat de asistencia"
+            >
+              <Bot size={28} />
+            </motion.button>
+          )}
+
+          {isChatOpen && (
+            <motion.div
+              className="chat-window"
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <MainContainer>
+                <ChatContainer>
+                  <ConversationHeader>
+                    {botAvatar}
+                    <ConversationHeader.Content userName="Asistente NeuraSur" info={isBotTyping ? "Escribiendo..." : "En línea"} />
+                    <ConversationHeader.Actions>
+                      <Button icon={<X size={20} />} onClick={() => setIsChatOpen(false)} aria-label="Cerrar chat" />
+                    </ConversationHeader.Actions>
+                  </ConversationHeader>
+                  <MessageList typingIndicator={isBotTyping ? <TypingIndicator content="NeuraSur está escribiendo..." /> : null}>
+                    {chatMessages.map((msg, i) => (
+                      <Message key={i} model={msg} avatarSpacer={msg.direction === 'incoming'} avatar={msg.direction === 'incoming' ? botAvatar : null} />
+                    ))}
+                  </MessageList>
+                  <MessageInput placeholder="Escribe tu mensaje aquí..." onSend={handleChatSend} attachButton={false} autoFocus />
+                </ChatContainer>
+              </MainContainer>
+            </motion.div>
+          )}
+        </div>
+      </ChatErrorBoundary>
     </div>
   );
 };

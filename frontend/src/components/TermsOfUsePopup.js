@@ -5,7 +5,7 @@ const TermsOfUsePopup = ({ onClose }) => {
   const termsData = {
     lastUpdated: "5 de junio de 2025",
     title: "Términos de Uso",
-    introduction: "Estos términos regulan el uso del chatbot ofrecido por FlujoDigital para la atención de consultas comerciales.",
+    introduction: "Estos términos regulan el uso del chatbot ofrecido por NeuraSur para la atención de consultas comerciales.",
     sections: [
       {
         heading: "1. Uso del chatbot",
@@ -17,7 +17,7 @@ const TermsOfUsePopup = ({ onClose }) => {
       },
       {
         heading: "3. Responsabilidad",
-        content: "FlujoDigital no se responsabiliza por el uso indebido del chatbot ni por errores derivados de información incompleta o incorrecta provista por el usuario."
+        content: "NeuraSur no se responsabiliza por el uso indebido del chatbot ni por errores derivados de información incompleta o incorrecta provista por el usuario."
       },
       {
         heading: "4. Privacidad, Protección de Datos y Cookies",
@@ -25,11 +25,11 @@ const TermsOfUsePopup = ({ onClose }) => {
       },
       {
         heading: "5. Propiedad intelectual",
-        content: "Todo el contenido provisto por el chatbot pertenece a FlujoDigital y no puede ser reproducido sin autorización previa."
+        content: "Todo el contenido provisto por el chatbot pertenece a NeuraSur y no puede ser reproducido sin autorización previa."
       },
       {
         heading: "6. Modificaciones",
-        content: "FlujoDigital se reserva el derecho de modificar estos términos en cualquier momento. Las actualizaciones se publicarán en esta misma sección."
+        content: "NeuraSur se reserva el derecho de modificar estos términos en cualquier momento. Las actualizaciones se publicarán en esta misma sección."
       }
     ]
   };

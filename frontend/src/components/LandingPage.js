@@ -193,7 +193,7 @@ window.open('https://wa.me/5491171299730?text=Hola,%20me%20interesa%20conocer%20
   };
 
 const handleEmailClick = () => {
-  window.open('mailto:info@flujodigital.com.ar', '_blank');
+  window.open('mailto:info@neurasur.com.ar', '_blank');
 };
 
 // Funciones para controlar los popups
@@ -301,7 +301,7 @@ const closePopup = () => {
       >
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
-            {/* Logo y nombre "FlujoDigital" a la derecha */}
+            {/* Logo y nombre "NeuraSur" a la derecha */}
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -310,8 +310,11 @@ const closePopup = () => {
                             className="cursor-pointer flex items-center space-x-3"
                             onClick={() => scrollToSection('hero')}
             >
-              <img src="/logo.png" alt="Logo" className="h-10 w-auto" />
-              <span className="text-xl font-semibold text-white">FlujoDigital</span> {/* se puede eliminar esta línea para quitar el texto */}
+              {/* Contenedor para resaltar el logo */}
+              <div className="bg-white/12 p-1.5 rounded-md shadow-sm"> 
+                <img src="/logo.png" alt="Logo NeuraSur" className="h-10 w-auto" />
+              </div>
+              <span className="text-xl font-semibold text-white">NeuraSur</span> {/* se puede eliminar esta línea para quitar el texto */}
               {isPreviewMode && <PreviewBanner />}
             </motion.div>
 
@@ -834,7 +837,7 @@ const closePopup = () => {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <h3 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent mb-4">
-                FlujoDigital
+                NeuraSur
               </h3>
               <p className="text-gray-400 leading-relaxed">
                 Transformamos tu negocio con tecnología accesible y efectiva que impulsa el crecimiento.
@@ -878,7 +881,7 @@ const closePopup = () => {
           
           <div className="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
             <p className="text-sm">
-              &copy; 2025 FlujoDigital. Todos los derechos reservados. <span className="mx-2">|</span> Diseño e implementación Web por <span className="italic text-emerald-400">FlujoDigital</span>
+              &copy; 2025 NeuraSur. Todos los derechos reservados. <span className="mx-2">|</span> Diseño e implementación Web por <span className="italic text-emerald-400">NeuraSur</span>
             </p>
           </div>
         </div>

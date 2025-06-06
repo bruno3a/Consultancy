@@ -5,8 +5,8 @@ const PrivacyPolicyPopup = ({ onClose }) => {
   const policyData = {
     lastUpdated: "5 de junio de 2025",
     title: "Política de Privacidad",
-    // Updated company name to FlujoDigital
-    introduction: "En FlujoDigital valoramos la privacidad de nuestros usuarios. Esta política explica cómo recopilamos, usamos y protegemos los datos personales que se comparten a través de nuestro chatbot o cualquier otro canal de comunicación.",
+    // Updated company name to NeuraSur
+    introduction: "En NeuraSur valoramos la privacidad de nuestros usuarios. Esta política explica cómo recopilamos, usamos y protegemos los datos personales que se comparten a través de nuestro chatbot o cualquier otro canal de comunicación.",
     sections: [
       {
         heading: "1. Información que recopilamos",

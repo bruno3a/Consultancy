@@ -1,8 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from './components/LandingPage.js';
-import PendingTasks from './components/PendingTasks.js'; // Asumiendo esta ruta
-import PreviewBanner from './components/PreviewBanner.js';
 import "./App.css";
 
 function App() {

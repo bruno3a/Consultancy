@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { 
   Zap, 
-  Database, 
   MessageSquare, 
   FileText, 
   Shield, 
@@ -18,16 +17,11 @@ import {
   MapPin,
   Menu,
   X,
-  ChevronDown,
   Globe,
   BarChart3,
   Wrench,
-  Wifi,
   RefreshCw,
-  Bot,
-  TrendingUp,
-  Eye,
-  Settings
+  Bot
 } from 'lucide-react';
 import PendingTasks from './PendingTasks';
 import PreviewBanner from './PreviewBanner';
@@ -51,6 +45,7 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import './ChatScopeStyles.css'; // Nuestros estilos personalizados para el contenedor del chat
 import ChatErrorBoundary from './ChatErrorBoundary'; // Importar el ErrorBoundary
 
+import { useForm, ValidationError } from '@formspree/react';
 const LandingPage = ({ showPendingTasks, isPreview }) => {
   const [isVisible, setIsVisible] = useState({});
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -66,13 +61,25 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
   const y2 = useTransform(scrollYProgress, [0, 1], [0, -300]);
   const y3 = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
-  const [formData, setFormData] = useState({
+  // Estado para el formulario de contacto (usado principalmente por N8N)
+  const [contactFormData, setContactFormData] = useState({
     email: '',
     message: ''
   });
 
+  // Estados para el envío del formulario de contacto con N8N
+  const [isN8NSubmitting, setIsN8NSubmitting] = useState(false);
+  const [n8nSubmitStatus, setN8NSubmitStatus] = useState(null); // null, 'success', 'error'
+  const [n8nSubmitMessage, setN8NSubmitMessage] = useState('');
+
+
   // Estado para gestionar el popup activo ('privacy-policy', 'terms-of-use', o null)
   const [activePopup, setActivePopup] = useState(null);
+
+  // Feature Flag y URLs/IDs para el formulario de contacto
+  const CONTACT_FORM_PROVIDER = process.env.REACT_APP_CONTACT_FORM_PROVIDER || 'n8n'; // 'n8n' (default) or 'formspree'
+  const N8N_CONTACT_FORM_WEBHOOK_URL = process.env.REACT_APP_N8N_CONTACT_FORM_WEBHOOK_URL || 'TU_N8N_CONTACT_FORM_WEBHOOK_URL_AQUI';
+  const FORMSPREE_FORM_ID = process.env.REACT_APP_FORMSPREE_FORM_ID || 'TU_FORMSPREE_FORM_ID_AQUI'; // Necesario si provider es 'formspree'
 
   // Estados para el Chat con @chatscope/chat-ui-kit-react
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -81,6 +88,19 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
 
   // IMPORTANTE: Reemplaza esta URL con la URL de tu webhook de n8n
   const N8N_CHATBOT_WEBHOOK_URL = process.env.REACT_APP_N8N_CHATBOT_WEBHOOK_URL || 'TU_N8N_WEBHOOK_URL_POR_DEFECTO_AQUI';
+
+  // Hook de Formspree (se llama incondicionalmente debido a las reglas de los hooks, pero solo se usa si el proveedor es 'formspree')
+  const [formspreeState, formspreeHandleSubmitFunction] = useForm(FORMSPREE_FORM_ID);
+
+  useEffect(() => {
+    if (CONTACT_FORM_PROVIDER === 'formspree' && (FORMSPREE_FORM_ID === 'TU_FORMSPREE_FORM_ID_AQUI' || !FORMSPREE_FORM_ID)) {
+      console.warn('ADVERTENCIA: El proveedor del formulario de contacto es "formspree", pero REACT_APP_FORMSPREE_FORM_ID no está configurado correctamente en el archivo .env. El formulario de contacto puede no funcionar.');
+    }
+    if (CONTACT_FORM_PROVIDER === 'n8n' && (N8N_CONTACT_FORM_WEBHOOK_URL === 'TU_N8N_CONTACT_FORM_WEBHOOK_URL_AQUI' || !N8N_CONTACT_FORM_WEBHOOK_URL)) {
+      console.warn('ADVERTENCIA: El proveedor del formulario de contacto es "n8n", pero REACT_APP_N8N_CONTACT_FORM_WEBHOOK_URL no está configurado correctamente en el archivo .env. El formulario de contacto puede no funcionar.');
+    }
+  }, []); // Se ejecuta solo una vez al montar
+
 
   // Detectar modo preview
   useEffect(() => {
@@ -214,10 +234,54 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
     setIsMenuOpen(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleContactFormInputChange = (e) => {
+    const { name, value } = e.target;
+    setContactFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleN8NSubmit = async (e) => {
     e.preventDefault();
-    alert('¡Gracias! Te contactaremos pronto.');
-    setFormData({ email: '', message: '' });
+    if (!N8N_CONTACT_FORM_WEBHOOK_URL || N8N_CONTACT_FORM_WEBHOOK_URL === 'TU_N8N_CONTACT_FORM_WEBHOOK_URL_AQUI') {
+      console.error("La URL del webhook para el formulario de contacto no está configurada.");
+      setN8NSubmitStatus('error');
+      setN8NSubmitMessage('Error de configuración: El servicio de contacto no está disponible.');
+      setIsN8NSubmitting(false);
+      return;
+    }
+
+    setIsN8NSubmitting(true);
+    setN8NSubmitStatus(null);
+    setN8NSubmitMessage('');
+
+    try {
+      const response = await fetch(N8N_CONTACT_FORM_WEBHOOK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(contactFormData),
+      });
+
+      if (response.ok) {
+        setN8NSubmitStatus('success');
+        setN8NSubmitMessage('¡Gracias! Tu mensaje ha sido enviado. Te contactaremos pronto.');
+        setContactFormData({ email: '', message: '' }); // Limpia el formulario para N8N
+      } else {
+        const errorData = await response.text();
+        console.error('Error al enviar el formulario:', response.status, errorData);
+        setN8NSubmitStatus('error');
+        setN8NSubmitMessage('Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo más tarde.');
+      }
+    } catch (error) {
+      console.error('Error de red o excepción al enviar el formulario:', error);
+      setN8NSubmitStatus('error');
+      setN8NSubmitMessage('No se pudo conectar con el servicio de envío. Revisa tu conexión o inténtalo más tarde.');
+    } finally {
+      setIsN8NSubmitting(false);
+    }
   };
 
 const handleDemoClick = () => {
@@ -917,20 +981,34 @@ const closePopup = () => {
               transition={{ duration: 0.8 }}
               className="bg-gray-800/50 backdrop-blur-sm p-8 rounded-3xl border border-gray-700/50"
             >
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form 
+                onSubmit={
+                  CONTACT_FORM_PROVIDER === 'formspree' ? formspreeHandleSubmitFunction : handleN8NSubmit
+                } 
+                className="space-y-6"
+              >
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-3">
                     Email *
                   </label>
                   <input
-                    type="email"
                     id="email"
+                    type="email"
+                    name="email"
                     required
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
                     className="w-full px-4 py-4 bg-gray-700/50 border border-gray-600 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-white placeholder-gray-400 transition-all duration-300"
                     placeholder="tu@email.com"
+                    value={CONTACT_FORM_PROVIDER === 'n8n' ? contactFormData.email : undefined}
+                    onChange={CONTACT_FORM_PROVIDER === 'n8n' ? handleContactFormInputChange : undefined}
                   />
+                  {CONTACT_FORM_PROVIDER === 'formspree' && (
+                    <ValidationError 
+                      prefix="Email" 
+                      field="email"
+                      errors={formspreeState.errors}
+                      className="text-red-400 text-sm mt-1"
+                    />
+                  )}
                 </div>
                 
                 <div>
@@ -939,23 +1017,65 @@ const closePopup = () => {
                   </label>
                   <textarea
                     id="message"
+                    name="message"
                     required
                     rows={5}
-                    value={formData.message}
-                    onChange={(e) => setFormData({...formData, message: e.target.value})}
                     className="w-full px-4 py-4 bg-gray-700/50 border border-gray-600 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-white placeholder-gray-400 resize-none transition-all duration-300"
                     placeholder="Contanos sobre tu proyecto o necesidad..."
+                    value={CONTACT_FORM_PROVIDER === 'n8n' ? contactFormData.message : undefined}
+                    onChange={CONTACT_FORM_PROVIDER === 'n8n' ? handleContactFormInputChange : undefined}
                   />
+                  {CONTACT_FORM_PROVIDER === 'formspree' && (
+                    <ValidationError 
+                      prefix="Message" 
+                      field="message"
+                      errors={formspreeState.errors}
+                      className="text-red-400 text-sm mt-1"
+                    />
+                  )}
                 </div>
-                
+
+                {/* Mensajes de estado para N8N */}
+                {CONTACT_FORM_PROVIDER === 'n8n' && n8nSubmitStatus === 'success' && (
+                  <div className="p-3 rounded-md text-sm bg-emerald-500/20 text-emerald-300">
+                    {n8nSubmitMessage}
+                  </div>
+                )}
+                {CONTACT_FORM_PROVIDER === 'n8n' && n8nSubmitStatus === 'error' && (
+                  <div className="p-3 rounded-md text-sm bg-red-500/20 text-red-300">
+                    {n8nSubmitMessage}
+                  </div>
+                )}
+
+                {/* Mensajes de estado para Formspree */}
+                {CONTACT_FORM_PROVIDER === 'formspree' && formspreeState.succeeded && (
+                  <div className="p-3 rounded-md text-sm bg-emerald-500/20 text-emerald-300">
+                    ¡Gracias! Tu mensaje ha sido enviado. Te contactaremos pronto.
+                  </div>
+                )}
+                {CONTACT_FORM_PROVIDER === 'formspree' && formspreeState.errors && formspreeState.errors.length > 0 && !formspreeState.errors.find(e => e.field) && (
+                  <div className="p-3 rounded-md text-sm bg-red-500/20 text-red-300">
+                    Hubo un error al enviar tu mensaje. Por favor, revisa los campos o inténtalo de nuevo.
+                  </div>
+                )}
+
                 <motion.button
                   type="submit"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 flex items-center justify-center"
+                  disabled={ (CONTACT_FORM_PROVIDER === 'n8n' && isN8NSubmitting) || (CONTACT_FORM_PROVIDER === 'formspree' && formspreeState.submitting) }
+                  className={`w-full bg-gradient-to-r from-emerald-500 to-teal-600 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 flex items-center justify-center ${
+                    ( (CONTACT_FORM_PROVIDER === 'n8n' && isN8NSubmitting) || (CONTACT_FORM_PROVIDER === 'formspree' && formspreeState.submitting) ) ? 'opacity-70 cursor-not-allowed' : ''
+                  }`}
                 >
-                  Enviar mensaje
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                  { ( (CONTACT_FORM_PROVIDER === 'n8n' && isN8NSubmitting) || (CONTACT_FORM_PROVIDER === 'formspree' && formspreeState.submitting) ) ? (
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  ) : (
+                    <>
+                      Enviar mensaje
+                      <ArrowRight className="ml-2 w-5 h-5" />
+                    </>
+                  )}
                 </motion.button>
               </form>
             </motion.div>

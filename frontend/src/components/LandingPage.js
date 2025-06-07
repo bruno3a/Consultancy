@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { 
   Zap, 
@@ -76,6 +76,9 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
 
   // Estado para gestionar el popup activo ('privacy-policy', 'terms-of-use', o null)
   const [activePopup, setActivePopup] = useState(null);
+
+  // Estado para el offset vertical debido al banner de cookies
+  const [cookieBannerOffset, setCookieBannerOffset] = useState(0);
 
   // Feature Flag y URLs/IDs para el formulario de contacto
   const CONTACT_FORM_PROVIDER = process.env.REACT_APP_CONTACT_FORM_PROVIDER || 'n8n'; // 'n8n' (default) or 'formspree'
@@ -311,6 +314,11 @@ const closePopup = () => {
   window.history.replaceState({ path: url.toString() }, '', url.toString());
   setActivePopup(null);
 };
+
+// Callback para manejar el cambio de altura/visibilidad del banner de cookies
+const handleCookieBannerOffsetChange = useCallback((height) => {
+  setCookieBannerOffset(height);
+}, []);
 
   // Manejador para enviar mensajes del chat a n8n
   const handleChatSend = async (textContent) => {
@@ -1230,7 +1238,11 @@ const closePopup = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={handleWhatsAppClick}
-        className="fixed bottom-6 right-6 bg-green-100 hover:bg-green-300 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50 hover:shadow-green-300/25"
+        // Removed bottom-6, will be handled by style. Kept right-6.
+        className="fixed right-6 bg-green-100 hover:bg-green-300 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50 hover:shadow-green-300/25"
+        style={{
+          bottom: `calc(1.5rem + ${cookieBannerOffset}px)` // 1.5rem is from bottom-6
+        }}
       >
         {/* Reemplaza MessageSquare con tu ícono de WhatsApp */}
         {/* Asegúrate de que el archivo whatsapp-logo.svg o .png esté en la carpeta public */}
@@ -1247,11 +1259,20 @@ const closePopup = () => {
       {activePopup === 'terms-of-use' && <TermsOfUsePopup onClose={closePopup} />}
 
       {/* Banner de Consentimiento de Cookies */}
-      <CookieConsentBanner onOpenPrivacyPolicy={() => openPopup('privacy-policy')} />
+      <CookieConsentBanner 
+        onOpenPrivacyPolicy={() => openPopup('privacy-policy')}
+        onVisibilityChange={handleCookieBannerOffsetChange} 
+      />
 
       {/* Chat con @chatscope/chat-ui-kit-react */}
-      <ChatErrorBoundary>
-        <div className="chat-widget-container">
+      <ChatErrorBoundary cookieBannerOffset={cookieBannerOffset}>
+        <div 
+          className="chat-widget-container" // This class provides: position:fixed, right: 20px, z-index: 1000.
+                                          // Its original bottom is 96px (from ChatScopeStyles.css).
+          style={{
+            // We override the 'bottom' from the class to include the cookieBannerOffset dynamically.
+            bottom: `calc(96px + ${cookieBannerOffset}px)` // Use 96px as base, from ChatScopeStyles.css
+          }}>
           {!isChatOpen && (
             <motion.button
               initial={{ scale: 0, opacity: 0 }}

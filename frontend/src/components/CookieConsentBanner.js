@@ -3,8 +3,7 @@ import { Cookie, CheckCircle, XCircle } from 'lucide-react';
 import { initializeAcceptedTrackingScripts } from '../utils/scriptManager'; // Importar
 
 const COOKIE_CONSENT_KEY = 'neurasur_cookie_consent';
-
-const CookieConsentBanner = ({ onOpenPrivacyPolicy }) => {
+const CookieConsentBanner = ({ onOpenPrivacyPolicy, onVisibilityChange }) => {
   const [isVisible, setIsVisible] = useState(false);
   const bannerRef = useRef(null);
   const acceptButtonRef = useRef(null);
@@ -23,49 +22,59 @@ const CookieConsentBanner = ({ onOpenPrivacyPolicy }) => {
       acceptButtonRef.current.focus();
     }
 
-    const handleKeyDown = (event) => {
-      if (!isVisible || !bannerRef.current) return;
-
-      if (event.key === 'Escape') {
-        // Opcional: permitir cerrar con Escape, podría interpretarse como rechazo implícito o posponer.
-        // Por ahora, no hacemos nada con Escape para forzar una elección explícita.
-        // handleConsent('declined'); // Ejemplo si se quisiera que Escape rechace
+    // Report height when visibility changes and banner is rendered
+    if (isVisible) {
+      if (bannerRef.current) {
+        onVisibilityChange(bannerRef.current.offsetHeight || 0);
+      } else {
+        // Fallback if ref is not immediately ready (unlikely after render)
+        onVisibilityChange(0);
       }
 
-      if (event.key === 'Tab') {
-        const focusableElements = Array.from(
-          bannerRef.current.querySelectorAll(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-          )
-        ).filter(el => !el.disabled && el.offsetParent !== null); // Solo visibles y habilitados
+      const handleKeyDown = (event) => {
+        if (!bannerRef.current) return; // Should be available if isVisible
 
-        if (focusableElements.length === 0) return;
+        if (event.key === 'Escape') {
+          // Opcional: permitir cerrar con Escape, podría interpretarse como rechazo implícito o posponer.
+          // Por ahora, no hacemos nada con Escape para forzar una elección explícita.
+          // handleConsent('declined'); // Ejemplo si se quisiera que Escape rechace
+        }
 
-        const firstElement = focusableElements[0];
-        const lastElement = focusableElements[focusableElements.length - 1];
+        if (event.key === 'Tab') {
+          const focusableElements = Array.from(
+            bannerRef.current.querySelectorAll(
+              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            )
+          ).filter(el => !el.disabled && el.offsetParent !== null); // Solo visibles y habilitados
 
-        if (event.shiftKey) { // Shift + Tab
-          if (document.activeElement === firstElement) {
-            lastElement.focus();
-            event.preventDefault();
-          }
-        } else { // Tab
-          if (document.activeElement === lastElement) {
-            firstElement.focus();
-            event.preventDefault();
+          if (focusableElements.length === 0) return;
+
+          const firstElement = focusableElements[0];
+          const lastElement = focusableElements[focusableElements.length - 1];
+
+          if (event.shiftKey) { // Shift + Tab
+            if (document.activeElement === firstElement) {
+              lastElement.focus();
+              event.preventDefault();
+            }
+          } else { // Tab
+            if (document.activeElement === lastElement) {
+              firstElement.focus();
+              event.preventDefault();
+            }
           }
         }
-      }
-    };
+      };
 
-    if (isVisible) {
       document.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+    } else {
+      onVisibilityChange(0); // Report 0 height when not visible
+      return undefined; // No listener to clean up if not visible
     }
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isVisible]);
+  }, [isVisible, onVisibilityChange]);
 
   const handleConsent = (consentValue) => {
     localStorage.setItem(COOKIE_CONSENT_KEY, consentValue);

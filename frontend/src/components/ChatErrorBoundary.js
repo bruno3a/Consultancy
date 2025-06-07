@@ -20,15 +20,23 @@ class ChatErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
+      const { cookieBannerOffset } = this.props;
+      const baseBottom = '1.5rem'; // Assuming this is the default bottom (e.g., from bottom-6 class)
+
       // UI de fallback cuando hay un error en el chat
       return (
-        <div className="chat-widget-container"> {/* Mantiene el posicionamiento */}
+        <div 
+          className="chat-widget-container" // This class likely provides position:fixed, left, z-index
+          style={{
+            bottom: `calc(${baseBottom} + ${cookieBannerOffset || 0}px)`,
+          }}
+        > {/* Mantiene el posicionamiento */}
           <div
             className="chat-launcher-button" // Reutiliza la clase para la apariencia de burbuja
             style={{
               backgroundColor: '#ef4444', // Rojo (Tailwind red-500) para indicar error
               color: 'white',
-              cursor: 'default',          // Cursor por defecto, ya que no es interactivo
+              cursor: 'default', // Cursor por defecto, ya que no es interactivo
               // Los estilos de tamaño, borde redondeado, etc., vienen de .chat-launcher-button
             }}
             title={

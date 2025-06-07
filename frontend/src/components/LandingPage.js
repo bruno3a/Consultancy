@@ -265,6 +265,7 @@ const closePopup = () => {
         localStorage.setItem('chat_user_id', userId);
       }
 
+      console.log('Enviando a n8n webhook:', N8N_CHATBOT_WEBHOOK_URL, 'con datos:', { message: textContent, userId: userId });
       const response = await fetch(N8N_CHATBOT_WEBHOOK_URL, {
         method: 'POST',
         headers: {
@@ -273,25 +274,61 @@ const closePopup = () => {
         body: JSON.stringify({ message: textContent, userId: userId })
       });
 
+      // Loguear status y content-type para diagnóstico
+      console.log('Respuesta de n8n - Status:', response.status);
+      console.log('Respuesta de n8n - Content-Type:', response.headers.get('Content-Type'));
+
       if (!response.ok) {
-        const errorData = await response.text();
-        console.error('Error en la respuesta del webhook de n8n:', response.status, errorData);
-        throw new Error(`Error del servidor: ${response.status}`);
+        // Error del servidor n8n (4xx, 5xx)
+        const errorText = await response.text(); // Intentar leer el cuerpo del error como texto
+        console.error('Error en la respuesta del webhook de n8n (status no OK):', response.status, errorText);
+        // Este error sí debería llevar al catch genérico que muestra "En este momento me estoy entrenando..."
+        throw new Error(`Error del servidor n8n: ${response.status}. Respuesta: ${errorText}`);
       }
 
-      const responseData = await response.json();
-      const botReplyText = responseData.reply || responseData.answer || responseData.text || (responseData.data && responseData.data.text) || "No he podido entender tu solicitud en este momento.";
+      // Si la respuesta es OK (2xx), intentamos procesarla
+      // Primero, clonamos la respuesta para poder leerla como texto (para debug) y luego como JSON.
+      const responseBodyText = await response.clone().text();
+      console.log('Respuesta de n8n - Cuerpo (texto crudo):', responseBodyText);
 
-      const newBotMessage = {
-        message: botReplyText,
-        sender: "NeuraSurBot",
-        direction: "incoming",
-        // avatar: <Avatar src="/logo.png" name="NeuraSurBot" /> // Avatar en cada mensaje (opcional)
-      };
-      setChatMessages(prevMessages => [...prevMessages, newBotMessage]);
+      let responseData;
+      try {
+        responseData = await response.json(); // Intentamos parsear como JSON
+        console.log('Respuesta de n8n - Datos JSON parseados:', responseData);
+      } catch (jsonError) {
+        // Error al parsear JSON, incluso si el status es OK
+        console.error('Error al parsear JSON de la respuesta de n8n:', jsonError);
+        console.error('Cuerpo de la respuesta que causó el error de JSON:', responseBodyText);
+        // Mostramos un mensaje específico para este caso, NO el genérico "entrenando"
+        const botErrorMessage = {
+          message: "Recibí una respuesta del servidor, pero no pude procesarla correctamente. Por favor, intenta de nuevo.",
+          sender: "NeuraSurBot",
+          direction: "incoming",
+        };
+        setChatMessages(prevMessages => [...prevMessages, botErrorMessage]);
+        setIsBotTyping(false);
+        return; // Salimos de handleChatSend aquí
+      }
+      
+      // Si llegamos aquí, responseData es un JSON válido
+      const botReplyText = responseData.reply || responseData.answer || responseData.text || (responseData.data && responseData.data.text);
 
+      if (!botReplyText) {
+        // El JSON es válido, pero no contiene los campos de respuesta esperados.
+        console.warn('La respuesta JSON de n8n no contiene un campo de respuesta esperado (reply, answer, text, data.text). ResponseData:', responseData);
+        const fallbackMessage = {
+          message: "No he podido entender tu solicitud en este momento.",
+          sender: "NeuraSurBot",
+          direction: "incoming",
+        };
+        setChatMessages(prevMessages => [...prevMessages, fallbackMessage]);
+      } else {
+        const newBotMessage = { message: botReplyText, sender: "NeuraSurBot", direction: "incoming" };
+        setChatMessages(prevMessages => [...prevMessages, newBotMessage]);
+      }
     } catch (error) {
-      console.error('Error al enviar mensaje a n8n o procesar respuesta:', error);
+      // Este catch ahora es para errores de red (fetch falló) o cuando response.ok fue false.
+      console.error('Error general en la comunicación con n8n o error del servidor:', error);
       const errorMessage = {
         message: "En este momento me estoy entrenando para responderte de la mejor manera!",
         sender: "NeuraSurBot",
@@ -736,7 +773,7 @@ const closePopup = () => {
               <motion.button
                 whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(20, 184, 166, 0.3)" }}
                 whileTap={{ scale: 0.95 }}
-                onClick={handleDemoClick}
+                onClick={() => scrollToSection('contact')}
                 className="bg-gradient-to-r from-teal-500 to-emerald-600 px-8 py-4 rounded-full text-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center"
               >
                 Consultar
@@ -944,9 +981,18 @@ const closePopup = () => {
             <div>
               <h4 className="text-white font-semibold mb-6">Servicios</h4>
               <ul className="space-y-3 text-gray-400">
-                <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Automatización</li>
-                <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Facturación Digital</li>
-                <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Consultoría</li>
+                <li 
+                  className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer"
+                  onClick={() => scrollToSection('services')}
+                >Automatización</li>
+                <li 
+                  className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer"
+                  onClick={() => scrollToSection('product')}
+                >Facturación Digital</li>
+                <li 
+                  className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer"
+                  onClick={() => scrollToSection('services')}
+                >Consultoría</li>
               </ul>
             </div>
             
@@ -954,7 +1000,10 @@ const closePopup = () => {
               <h4 className="text-white font-semibold mb-6">Empresa</h4>
               <ul className="space-y-3 text-gray-400">
                 <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Casos de éxito</li>
-                <li className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer">Contacto</li>
+                <li 
+                  className="hover:text-emerald-400 transition-colors duration-300 cursor-pointer"
+                  onClick={() => scrollToSection('contact')}
+                >Contacto</li>
               </ul>
             </div>
             

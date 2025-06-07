@@ -1,6 +1,6 @@
 {
-  "name": "FlujoDigital",
-  "version": "0.9.0",
+  "name": "NeuraSur",
+  "version": "0.9.2",
   "private": true,
   "dependencies": {
     "@chatscope/chat-ui-kit-react": "^2.1.1",

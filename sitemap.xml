@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://tudominio.com/</loc>
-        <lastmod>2024-01-15</lastmod>
+        <loc>https://neurasur.nextba.com/</loc>
+        <lastmod>2024-06-05</lastmod> <!-- Actualiza esta fecha con la última modificación importante -->
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
-    </url>
-    <url>
-        <loc>https://tudominio.com/servicios</loc>
-        <lastmod>2024-01-15</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
     </url>
 </urlset>

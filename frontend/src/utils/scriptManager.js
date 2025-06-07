@@ -6,7 +6,7 @@ const SCRIPT_LOAD_STATUS = {
   // Agrega aquí otros scripts que necesites gestionar
 };
 
-const COOKIE_CONSENT_KEY = 'flujodigital_cookie_consent';
+const COOKIE_CONSENT_KEY = 'neurasur_cookie_consent';
 
 /**
  * Carga el script de Google Analytics.

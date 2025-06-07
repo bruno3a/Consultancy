@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Cookie, CheckCircle, XCircle } from 'lucide-react';
 import { initializeAcceptedTrackingScripts } from '../utils/scriptManager'; // Importar
 
-const COOKIE_CONSENT_KEY = 'flujodigital_cookie_consent';
+const COOKIE_CONSENT_KEY = 'neurasur_cookie_consent';
 
 const CookieConsentBanner = ({ onOpenPrivacyPolicy }) => {
   const [isVisible, setIsVisible] = useState(false);

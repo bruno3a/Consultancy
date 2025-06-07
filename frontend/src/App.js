@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from 'react-helmet-async';
 import LandingPage from './components/LandingPage.js';
 import "./App.css";
 
@@ -10,19 +11,21 @@ function App() {
   return (
     <div className="App">
       {/* PreviewBanner se renderizará dentro de LandingPage ahora */}
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <LandingPage
-                showPendingTasks={!isProduction}
-                isPreview={isPreview} // Pasamos isPreview como prop
-              />
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+      <HelmetProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <LandingPage
+                  showPendingTasks={!isProduction}
+                  isPreview={isPreview} // Pasamos isPreview como prop
+                />
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </HelmetProvider>
     </div>
   );
 }

@@ -23,6 +23,7 @@ import {
   RefreshCw,
   Bot
 } from 'lucide-react';
+import { Helmet } from 'react-helmet-async'; // Importar Helmet
 import PendingTasks from './PendingTasks';
 import PreviewBanner from './PreviewBanner';
 import PrivacyPolicyPopup from './PrivacyPolicyPopup'; // Importar el nuevo componente
@@ -484,6 +485,76 @@ const closePopup = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white overflow-hidden">
+      <Helmet>
+        {/* Meta Tags Principales */}
+        <title>NeuraSur: Consultoría Digital y Chatbots con IA para Pymes</title>
+        <meta name="description" content="NeuraSur ofrece consultoría digital experta para pymes en Buenos Aires. Potenciamos tu negocio con automatización, chatbots con IA, desarrollo web y transformación digital." />
+        <meta name="keywords" content="consultoría digital pymes, chatbots ia, automatización procesos, transformación digital, desarrollo web, consultoria digital buenos aires, neurasur" />
+        <link rel="canonical" href="https://neurasur.nextba.com/" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://neurasur.nextba.com/" />
+        <meta property="og:title" content="NeuraSur: Consultoría Digital y Chatbots con IA para Pymes" />
+        <meta property="og:description" content="Transformación digital para pequeñas empresas con NeuraSur. Ofrecemos chatbots con IA, automatización y consultoría experta." />
+        <meta property="og:image" content="https://neurasur.nextba.com/og-image.png" /> {/* Asegúrate que esta URL sea correcta y la imagen exista */}
+        <meta property="og:site_name" content="NeuraSur" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://neurasur.nextba.com/" />
+        <meta name="twitter:title" content="NeuraSur: Consultoría Digital y Chatbots con IA para Pymes" />
+        <meta name="twitter:description" content="Transformación digital para pequeñas empresas con NeuraSur. Ofrecemos chatbots con IA, automatización y consultoría experta." />
+        <meta name="twitter:image" content="https://neurasur.nextba.com/og-image.png" /> {/* Asegúrate que esta URL sea correcta y la imagen exista */}
+        {/* <meta name="twitter:site" content="@tuUsuarioTwitter" /> */} {/* Descomenta y añade tu usuario de Twitter si tienes */}
+        {/* <meta name="twitter:creator" content="@tuUsuarioTwitter" /> */} {/* Descomenta y añade tu usuario de Twitter si tienes */}
+
+        {/* Datos Estructurados JSON-LD */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "NeuraSur",
+            "url": "https://neurasur.nextba.com/",
+            "logo": "https://neurasur.nextba.com/logo.png", // Asegúrate que esta URL sea correcta
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+54-911-7129-9730",
+              "contactType": "Customer Service",
+              "areaServed": "AR",
+              "availableLanguage": ["es"]
+            },
+            "description": "NeuraSur ofrece consultoría digital experta para pymes en Buenos Aires, especializada en automatización, chatbots con IA, desarrollo web y transformación digital.",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Buenos Aires",
+              "addressCountry": "AR"
+            }
+            // "sameAs": [ // Añade tus redes sociales aquí si las tienes
+            //   "https://www.linkedin.com/company/neurasur"
+            // ]
+          })}
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "serviceType": "Chatbots con Inteligencia Artificial",
+            "provider": {
+              "@type": "Organization",
+              "name": "NeuraSur"
+            },
+            "name": "Desarrollo e Implementación de Chatbots con IA para Pymes",
+            "description": "Creamos chatbots con IA personalizados para atención al cliente 24/7, ventas en línea e integración con WhatsApp. Mejora la eficiencia y la experiencia de tus usuarios con NeuraSur.",
+            "areaServed": {
+              "@type": "Country",
+              "name": "Argentina"
+            },
+            "keywords": "chatbots con ia, chatbots para atencion al cliente, chatbot whatsapp, chatbots para ventas en linea, inteligencia artificial para empresas, consultoría digital pymes"
+          })}
+        </script>
+      </Helmet>
+
       {/* Enhanced Navigation */}
       <motion.nav 
         initial={{ y: -100 }}

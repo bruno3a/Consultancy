@@ -21,7 +21,8 @@ import {
   BarChart3,
   Wrench,
   RefreshCw,
-  Bot
+  Bot,
+  Send // Añadido para el ícono de Telegram
 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async'; // Importar Helmet
 import PendingTasks from './PendingTasks';
@@ -82,9 +83,12 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
 
   // Feature Flag y URLs/IDs para el formulario de contacto
   const CONTACT_FORM_PROVIDER = process.env.REACT_APP_CONTACT_FORM_PROVIDER || 'n8n'; // 'n8n' (default) or 'formspree'
+  // Feature Flag para el botón flotante de chat
+  // Puede ser 'whatsapp', 'telegram', o 'none' (o cualquier otro valor) para no mostrar ninguno.
+  const CHAT_FAB_PLATFORM = process.env.REACT_APP_CHAT_FAB_PLATFORM || 'whatsapp'; 
+
   const N8N_CONTACT_FORM_WEBHOOK_URL = process.env.REACT_APP_N8N_CONTACT_FORM_WEBHOOK_URL || 'TU_N8N_CONTACT_FORM_WEBHOOK_URL_AQUI';
   const FORMSPREE_FORM_ID = process.env.REACT_APP_FORMSPREE_FORM_ID || 'TU_FORMSPREE_FORM_ID_AQUI'; // Necesario si provider es 'formspree'
-
   // Estados para el Chat con @chatscope/chat-ui-kit-react
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
@@ -297,7 +301,11 @@ window.open('https://wa.me/5491171299730?text=Hola,%20me%20interesa%20conocer%20
   };
 
 const handleEmailClick = () => {
-  window.open('mailto:info@neurasur.com.ar', '_blank');
+  window.open('mailto:contact@nextba.com', '_blank');
+};
+
+const handleTelegramClick = () => {
+  window.open('https://t.me/Neurasur_bot', '_blank', 'noopener,noreferrer');
 };
 
 // Funciones para controlar los popups
@@ -1037,7 +1045,7 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
               <div className="space-y-6 mb-8">
                 {[
                   { icon: <Phone className="w-5 h-5" />, text: "+54 911 7129 9730" },
-                  { icon: <Mail className="w-5 h-5 cursor-pointer" onClick={handleEmailClick} />, text:<span className="cursor-pointer" onClick={handleEmailClick}> br1trezza@gmail.com</span>},
+                  { icon: <Mail className="w-5 h-5 cursor-pointer" onClick={handleEmailClick} />, text:<span className="cursor-pointer" onClick={handleEmailClick}> contact@nextba.com</span>},
                   { icon: <MapPin className="w-5 h-5" />, text: "Buenos Aires, Argentina" }
                 ].map((contact, index) => (
                   <motion.div
@@ -1230,26 +1238,43 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
         </div>
       </footer>
 
-      {/* WhatsApp Floating Button */}
-      <motion.button
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ delay: 2, duration: 0.5, type: "spring" }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={handleWhatsAppClick}
-        // Removed bottom-6, will be handled by style. Kept right-6.
-        className="fixed right-6 bg-green-100 hover:bg-green-300 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50 hover:shadow-green-300/25"
-        style={{
-          bottom: `calc(1.5rem + ${cookieBannerOffset}px)` // 1.5rem is from bottom-6
-        }}
-      >
-        {/* Reemplaza MessageSquare con tu ícono de WhatsApp */}
-        {/* Asegúrate de que el archivo whatsapp-logo.svg o .png esté en la carpeta public */}
-        <img src="/whatsapp-logo.png" alt="WhatsApp" className="w-7 h-7" /> 
-        {/* Si usas PNG y necesitas ajustar el tamaño, puedes hacerlo aquí. 
-            Si el SVG tiene su propio tamaño, podrías no necesitar w-7 h-7 */}
-      </motion.button>
+      {/* Floating Action Button (WhatsApp o Telegram según Feature Flag) */}
+      {CHAT_FAB_PLATFORM === 'whatsapp' && (
+        <motion.button
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 2, duration: 0.5, type: "spring" }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={handleWhatsAppClick}
+          className="fixed right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50 hover:shadow-green-500/30"
+          aria-label="Contactar por WhatsApp"
+          style={{
+            bottom: `calc(1.5rem + ${cookieBannerOffset}px)` // 1.5rem es el equivalente a bottom-6
+          }}
+        >
+          <img src="/whatsapp-logo.png" alt="WhatsApp" className="w-7 h-7" />
+        </motion.button>
+      )}
+
+      {CHAT_FAB_PLATFORM === 'telegram' && (
+        <motion.button
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 2, duration: 0.5, type: "spring" }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={handleTelegramClick}
+          className="fixed right-6 bg-sky-500 hover:bg-sky-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50 hover:shadow-sky-500/30" // Color base sky-500 (celeste Telegram)
+          aria-label="Contactar por Telegram"
+          style={{
+            bottom: `calc(1.5rem + ${cookieBannerOffset}px)` // 1.5rem es el equivalente a bottom-6
+          }}
+        >
+          <Send size={28} /> {/* Ícono Send de lucide-react, adecuado para Telegram */}
+        </motion.button>
+      )}
+
 
       {/* Visor de Tareas Pendientes (para desarrollo/recordatorio) */}
       {isPreviewMode && <PendingTasks />}

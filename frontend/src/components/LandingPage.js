@@ -22,7 +22,9 @@ import {
   Wrench,
   RefreshCw,
   Bot,
-  Send // Añadido para el ícono de Telegram
+  Send, // Añadido para el ícono de Telegram
+  Star,
+  AlertTriangle
 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async'; // Importar Helmet
 import PendingTasks from './PendingTasks';
@@ -84,8 +86,10 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
   // Feature Flag y URLs/IDs para el formulario de contacto
   const CONTACT_FORM_PROVIDER = process.env.REACT_APP_CONTACT_FORM_PROVIDER || 'n8n'; // 'n8n' (default) or 'formspree'
   // Feature Flag para el botón flotante de chat
-  // Puede ser 'whatsapp', 'telegram', o 'none' (o cualquier otro valor) para no mostrar ninguno.
-  const CHAT_FAB_PLATFORM = process.env.REACT_APP_CHAT_FAB_PLATFORM || 'whatsapp'; 
+  // Puede ser 'whatsapp', 'telegram', 'both', o 'none' para controlar qué botones mostrar
+  const CHAT_FAB_PLATFORM = process.env.REACT_APP_CHAT_FAB_PLATFORM || 'both';
+  
+  console.log('CHAT_FAB_PLATFORM:', CHAT_FAB_PLATFORM); // Debug log
 
   const N8N_CONTACT_FORM_WEBHOOK_URL = process.env.REACT_APP_N8N_CONTACT_FORM_WEBHOOK_URL || 'TU_N8N_CONTACT_FORM_WEBHOOK_URL_AQUI';
   const FORMSPREE_FORM_ID = process.env.REACT_APP_FORMSPREE_FORM_ID || 'TU_FORMSPREE_FORM_ID_AQUI'; // Necesario si provider es 'formspree'
@@ -446,14 +450,16 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
       description: "Automatizamos la atención al cliente 24/7 con inteligencia artificial que entiende y responde como un humano.",
       benefits: ["Atención 24/7", "Respuestas inteligentes", "Más ventas"],
       cta: "Probar chatbot",
-      trending: true
+      trending: true,
+      comingSoon: false
     },
     {
       icon: <Zap className="w-8 h-8" />,
       title: "Automatización de Procesos",
       description: "Eliminamos tareas repetitivas conectando WhatsApp, Excel, emails y sistemas para que trabajen solos.",
       benefits: ["Ahorro de tiempo", "Menos errores", "Mayor productividad"],
-      cta: "Automatizar procesos"
+      cta: "Automatizar procesos",
+      comingSoon: false
     },
     {
       icon: <Shield className="w-8 h-8" />,
@@ -855,6 +861,11 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
                     <span>Interactuá!</span>
                   </button>
                 )}
+                {service.comingSoon && (
+                  <div className="absolute top-[-1rem] right-[-0.5rem] bg-amber-500 text-white font-semibold py-2 px-4 rounded-xl shadow-lg flex items-center space-x-2">
+                    <span>Próximamente</span>
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>
@@ -922,13 +933,13 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
               </div>
 
               <motion.button
-                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(20, 184, 166, 0.3)" }}
+                whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => scrollToSection('contact')}
-                className="bg-gradient-to-r from-teal-500 to-emerald-600 px-8 py-4 rounded-full text-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center"
+                className="bg-gradient-to-r from-gray-500 to-gray-600 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 flex items-center cursor-not-allowed opacity-70"
+                disabled
               >
-                Consultar
-                <ArrowRight className="ml-2 w-5 h-5" />
+                Próximamente
               </motion.button>
             </motion.div>
 
@@ -1044,7 +1055,7 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
 
               <div className="space-y-6 mb-8">
                 {[
-                  { icon: <Phone className="w-5 h-5" />, text: "+54 911 7129 9730" },
+                  { icon: <Phone className="w-5 h-5 cursor-pointer" onClick={handleWhatsAppClick} />, text: <span className="cursor-pointer" onClick={handleWhatsAppClick}>Contactanos por WhatsApp</span> },
                   { icon: <Mail className="w-5 h-5 cursor-pointer" onClick={handleEmailClick} />, text:<span className="cursor-pointer" onClick={handleEmailClick}> contact@nextba.com</span>},
                   { icon: <MapPin className="w-5 h-5" />, text: "Buenos Aires, Argentina" }
                 ].map((contact, index) => (
@@ -1238,8 +1249,8 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
         </div>
       </footer>
 
-      {/* Floating Action Button (WhatsApp o Telegram según Feature Flag) */}
-      {CHAT_FAB_PLATFORM === 'whatsapp' && (
+      {/* Floating Action Buttons (WhatsApp y/o Telegram según Feature Flag) */}
+      {(CHAT_FAB_PLATFORM === 'whatsapp' || CHAT_FAB_PLATFORM === 'both') && (
         <motion.button
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -1247,17 +1258,17 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={handleWhatsAppClick}
-          className="fixed right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50 hover:shadow-green-500/30"
+          className="fixed right-6 bg-white hover:bg-gray-100 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50"
           aria-label="Contactar por WhatsApp"
           style={{
-            bottom: `calc(1.5rem + ${cookieBannerOffset}px)` // 1.5rem es el equivalente a bottom-6
+            bottom: `calc(6rem + ${cookieBannerOffset}px)`
           }}
         >
-          <img src="/whatsapp-logo.png" alt="WhatsApp" className="w-7 h-7" />
+          <img src="/whatsapp-logo.png" alt="WhatsApp" className="w-8 h-8" />
         </motion.button>
       )}
 
-      {CHAT_FAB_PLATFORM === 'telegram' && (
+      {(CHAT_FAB_PLATFORM === 'telegram' || CHAT_FAB_PLATFORM === 'both') && (
         <motion.button
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -1265,13 +1276,13 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={handleTelegramClick}
-          className="fixed right-6 bg-sky-500 hover:bg-sky-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50 hover:shadow-sky-500/30" // Color base sky-500 (celeste Telegram)
+          className="fixed right-6 bg-sky-500 hover:bg-sky-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-50"
           aria-label="Contactar por Telegram"
           style={{
-            bottom: `calc(1.5rem + ${cookieBannerOffset}px)` // 1.5rem es el equivalente a bottom-6
+            bottom: `calc(1.5rem + ${cookieBannerOffset}px)`
           }}
         >
-          <Send size={28} /> {/* Ícono Send de lucide-react, adecuado para Telegram */}
+          <Send size={28} />
         </motion.button>
       )}
 
@@ -1292,11 +1303,9 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
       {/* Chat con @chatscope/chat-ui-kit-react */}
       <ChatErrorBoundary cookieBannerOffset={cookieBannerOffset}>
         <div 
-          className="chat-widget-container" // This class provides: position:fixed, right: 20px, z-index: 1000.
-                                          // Its original bottom is 96px (from ChatScopeStyles.css).
+          className="chat-widget-container"
           style={{
-            // We override the 'bottom' from the class to include the cookieBannerOffset dynamically.
-            bottom: `calc(96px + ${cookieBannerOffset}px)` // Use 96px as base, from ChatScopeStyles.css
+            bottom: `calc(10.5rem + ${cookieBannerOffset}px)`
           }}>
           {!isChatOpen && (
             <motion.button

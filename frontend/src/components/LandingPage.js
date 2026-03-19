@@ -24,7 +24,11 @@ import {
   Bot,
   Send, // Añadido para el ícono de Telegram
   Star,
-  AlertTriangle
+  AlertTriangle,
+  ChevronDown,
+  Linkedin,
+  Instagram,
+  Facebook
 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async'; // Importar Helmet
 import PendingTasks from './PendingTasks';
@@ -105,13 +109,17 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
   const [formspreeState, formspreeHandleSubmitFunction] = useForm(FORMSPREE_FORM_ID);
 
   useEffect(() => {
-    if (CONTACT_FORM_PROVIDER === 'formspree' && (FORMSPREE_FORM_ID === 'TU_FORMSPREE_FORM_ID_AQUI' || !FORMSPREE_FORM_ID)) {
-      console.warn('ADVERTENCIA: El proveedor del formulario de contacto es "formspree", pero REACT_APP_FORMSPREE_FORM_ID no está configurado correctamente en el archivo .env. El formulario de contacto puede no funcionar.');
-    }
-    if (CONTACT_FORM_PROVIDER === 'n8n' && (N8N_CONTACT_FORM_WEBHOOK_URL === 'TU_N8N_CONTACT_FORM_WEBHOOK_URL_AQUI' || !N8N_CONTACT_FORM_WEBHOOK_URL)) {
-      console.warn('ADVERTENCIA: El proveedor del formulario de contacto es "n8n", pero REACT_APP_N8N_CONTACT_FORM_WEBHOOK_URL no está configurado correctamente en el archivo .env. El formulario de contacto puede no funcionar.');
-    }
-  }, []); // Se ejecuta solo una vez al montar
+    const initializeContactForm = async () => {
+      if (CONTACT_FORM_PROVIDER === 'formspree' && (FORMSPREE_FORM_ID === 'TU_FORMSPREE_FORM_ID_AQUI' || !FORMSPREE_FORM_ID)) {
+        console.warn('ADVERTENCIA: El proveedor del formulario de contacto es "formspree", pero REACT_APP_FORMSPREE_FORM_ID no está configurado correctamente en el archivo .env. El formulario de contacto puede no funcionar.');
+      }
+      if (CONTACT_FORM_PROVIDER === 'n8n' && (N8N_CONTACT_FORM_WEBHOOK_URL === 'TU_N8N_CONTACT_FORM_WEBHOOK_URL_AQUI' || !N8N_CONTACT_FORM_WEBHOOK_URL)) {
+        console.warn('ADVERTENCIA: El proveedor del formulario de contacto es "n8n", pero REACT_APP_N8N_CONTACT_FORM_WEBHOOK_URL no está configurado correctamente en el archivo .env. El formulario de contacto puede no funcionar.');
+      }
+    };
+
+    initializeContactForm();
+  }, [CONTACT_FORM_PROVIDER, FORMSPREE_FORM_ID, N8N_CONTACT_FORM_WEBHOOK_URL]); // Se ejecuta solo una vez al montar
 
 
   // Detectar modo preview
@@ -191,7 +199,7 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [navItems]);
 
   // Efecto para manejar la visibilidad de los popups vía URL
   useEffect(() => {

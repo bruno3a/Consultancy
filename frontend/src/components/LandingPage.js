@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { 
   Zap, 
@@ -22,13 +22,7 @@ import {
   Wrench,
   RefreshCw,
   Bot,
-  Send, // Añadido para el ícono de Telegram
-  Star,
-  AlertTriangle,
-  ChevronDown,
-  Linkedin,
-  Instagram,
-  Facebook
+  Send
 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async'; // Importar Helmet
 import PendingTasks from './PendingTasks';
@@ -168,14 +162,14 @@ const LandingPage = ({ showPendingTasks, isPreview }) => {
     }
   }, [chatMessages.length]); // Se ejecuta si chatMessages.length cambia, para evitar múltiples bienvenidas.
 
-  // Navigation items
-  const navItems = [
+  // Navigation items - memoizado para evitar recreación en cada render
+  const navItems = useMemo(() => [
     { id: 'hero', label: 'Inicio', icon: null },
     { id: 'services', label: 'Servicios', icon: <Zap className="w-4 h-4" /> },
     { id: 'product', label: 'Productos', icon: <FileText className="w-4 h-4" /> },
     { id: 'audience', label: 'Clientes', icon: <Users className="w-4 h-4" /> },
     { id: 'contact', label: 'Contacto', icon: <Phone className="w-4 h-4" /> }
-  ];
+  ], []);
 
   useEffect(() => {
     const handleScroll = () => {

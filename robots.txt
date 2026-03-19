@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /private/
 
-Sitemap: https://neurasur.nextba.com/sitemap.xml
+Sitemap: https://neurasur.com/sitemap.xml

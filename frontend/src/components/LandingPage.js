@@ -10,8 +10,6 @@ import {
   Smartphone, 
   ArrowRight,
   CheckCircle,
-  Clock,
-  Target,
   Phone,
   Mail,
   MapPin,

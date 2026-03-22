@@ -307,7 +307,7 @@ window.open('https://wa.me/5491171299730?text=Hola,%20me%20interesa%20conocer%20
   };
 
 const handleEmailClick = () => {
-  window.open('mailto:contact@nextba.com', '_blank');
+  window.open('mailto:contact@neurasur.com', '_blank');
 };
 
 const handleTelegramClick = () => {
@@ -514,67 +514,176 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
         <title>NeuraSur: Consultoría Digital y Chatbots con IA para Pymes</title>
         <meta name="description" content="NeuraSur ofrece consultoría digital experta para pymes en Buenos Aires. Potenciamos tu negocio con automatización, chatbots con IA, desarrollo web y transformación digital." />
         <meta name="keywords" content="consultoría digital pymes, chatbots ia, automatización procesos, transformación digital, desarrollo web, consultoria digital buenos aires, neurasur" />
-        <link rel="canonical" href="https://neurasur.nextba.com/" />
+        <link rel="canonical" href="https://neurasur.com/" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://neurasur.nextba.com/" />
+        <meta property="og:url" content="https://neurasur.com/" />
         <meta property="og:title" content="NeuraSur: Consultoría Digital y Chatbots con IA para Pymes" />
         <meta property="og:description" content="Transformación digital para pequeñas empresas con NeuraSur. Ofrecemos chatbots con IA, automatización y consultoría experta." />
-        <meta property="og:image" content="https://neurasur.nextba.com/og-image.png" /> {/* Asegúrate que esta URL sea correcta y la imagen exista */}
+        <meta property="og:image" content="https://neurasur.com/og-image.png" />
         <meta property="og:site_name" content="NeuraSur" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://neurasur.nextba.com/" />
+        <meta name="twitter:url" content="https://neurasur.com/" />
         <meta name="twitter:title" content="NeuraSur: Consultoría Digital y Chatbots con IA para Pymes" />
         <meta name="twitter:description" content="Transformación digital para pequeñas empresas con NeuraSur. Ofrecemos chatbots con IA, automatización y consultoría experta." />
-        <meta name="twitter:image" content="https://neurasur.nextba.com/og-image.png" /> {/* Asegúrate que esta URL sea correcta y la imagen exista */}
+        <meta name="twitter:image" content="https://neurasur.com/og-image.png" />
         {/* <meta name="twitter:site" content="@tuUsuarioTwitter" /> */} {/* Descomenta y añade tu usuario de Twitter si tienes */}
         {/* <meta name="twitter:creator" content="@tuUsuarioTwitter" /> */} {/* Descomenta y añade tu usuario de Twitter si tienes */}
 
-        {/* Datos Estructurados JSON-LD */}
+        {/* Datos Estructurados JSON-LD mejorados para IA */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "NeuraSur",
-            "url": "https://neurasur.nextba.com/",
-            "logo": "https://neurasur.nextba.com/logo.png", // Asegúrate que esta URL sea correcta
+            "alternateName": "NeuraSur Consultoría Digital",
+            "url": "https://neurasur.com/",
+            "logo": "https://neurasur.com/logo.png",
+            "description": "Consultoría digital especializada en transformación digital para pymes. Ofrecemos chatbots con IA, automatización de procesos, desarrollo web y business intelligence en Buenos Aires, Argentina.",
+            "foundingDate": "2024",
+            "slogan": "Transformación Digital Inteligente para Pymes",
             "contactPoint": {
               "@type": "ContactPoint",
               "telephone": "+54-911-7129-9730",
               "contactType": "Customer Service",
               "areaServed": "AR",
-              "availableLanguage": ["es"]
+              "availableLanguage": ["es", "Spanish"],
+              "contactOption": "TollFree"
             },
-            "description": "NeuraSur ofrece consultoría digital experta para pymes en Buenos Aires, especializada en automatización, chatbots con IA, desarrollo web y transformación digital.",
+            "email": "contact@neurasur.com",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Buenos Aires",
+              "addressRegion": "CABA",
+              "addressCountry": "AR"
+            },
+            "sameAs": [
+              "https://www.linkedin.com/company/neurasur",
+              "https://twitter.com/neurasur"
+            ],
+            "knowsAbout": [
+              "Inteligencia Artificial",
+              "Chatbots",
+              "Automatización de Procesos",
+              "Transformación Digital",
+              "Business Intelligence",
+              "Desarrollo Web",
+              "Marketing Digital",
+              "WhatsApp Business API"
+            ],
+            "areaServed": {
+              "@type": "GeoCircle",
+              "geoMidpoint": {
+                "@type": "GeoCoordinates",
+                "latitude": "-34.6037",
+                "longitude": "-58.3816"
+              },
+              "geoRadius": "100000"
+            }
+          })}
+        </script>
+
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ProfessionalService",
+            "name": "NeuraSur - Consultoría Digital para Pymes",
+            "image": "https://neurasur.com/og-image.png",
+            "priceRange": "$$",
+            "telephone": "+54-911-7129-9730",
             "address": {
               "@type": "PostalAddress",
               "addressLocality": "Buenos Aires",
               "addressCountry": "AR"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": "-34.6037",
+              "longitude": "-58.3816"
+            },
+            "url": "https://neurasur.com/",
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "Servicios de Transformación Digital",
+              "itemListElement": [
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Chatbots con Inteligencia Artificial",
+                    "description": "Desarrollo de chatbots personalizados con IA para atención al cliente 24/7, integración con WhatsApp, automatización de ventas y soporte técnico."
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Automatización de Procesos Empresariales",
+                    "description": "Automatización de tareas repetitivas, integración de sistemas, workflows inteligentes y optimización de procesos con n8n y herramientas low-code."
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Business Intelligence y Análisis de Datos",
+                    "description": "Dashboards interactivos, reportes automáticos, análisis predictivo y visualización de datos para toma de decisiones informadas."
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Desarrollo Web y Presencia Digital",
+                    "description": "Sitios web modernos, optimización SEO, estrategias de conversión y mejora de imagen profesional online."
+                  }
+                }
+              ]
             }
-            // "sameAs": [ // Añade tus redes sociales aquí si las tienes
-            //   "https://www.linkedin.com/company/neurasur"
-            // ]
           })}
         </script>
+
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Service",
-            "serviceType": "Chatbots con Inteligencia Artificial",
-            "provider": {
-              "@type": "Organization",
-              "name": "NeuraSur"
-            },
-            "name": "Desarrollo e Implementación de Chatbots con IA para Pymes",
-            "description": "Creamos chatbots con IA personalizados para atención al cliente 24/7, ventas en línea e integración con WhatsApp. Mejora la eficiencia y la experiencia de tus usuarios con NeuraSur.",
-            "areaServed": {
-              "@type": "Country",
-              "name": "Argentina"
-            },
-            "keywords": "chatbots con ia, chatbots para atencion al cliente, chatbot whatsapp, chatbots para ventas en linea, inteligencia artificial para empresas, consultoría digital pymes"
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "¿Qué es un chatbot con IA y cómo puede ayudar a mi pyme?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Un chatbot con IA es un asistente virtual que utiliza inteligencia artificial para responder preguntas de clientes 24/7. Para pymes, automatiza atención al cliente, califica leads, responde consultas frecuentes y puede integrarse con WhatsApp, reduciendo costos operativos hasta un 60%."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Cuánto cuesta implementar automatización en mi empresa?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "El costo varía según la complejidad, pero en NeuraSur ofrecemos soluciones desde $500 USD mensuales. La inversión se recupera típicamente en 3-6 meses gracias al ahorro en tiempo y reducción de errores manuales."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Qué diferencia a NeuraSur de otras consultoras digitales?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "NeuraSur se especializa en pymes argentinas, ofreciendo soluciones prácticas y accesibles. Usamos tecnologías low-code/no-code que reducen costos, implementamos en semanas (no meses) y brindamos soporte en español con conocimiento del mercado local."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "¿Puedo integrar un chatbot con mi WhatsApp Business?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Sí, NeuraSur desarrolla chatbots que se integran nativamente con WhatsApp Business API. Esto permite automatizar respuestas, gestionar conversaciones masivas y mantener tu número de WhatsApp como canal principal de atención."
+                }
+              }
+            ]
           })}
         </script>
       </Helmet>
@@ -896,53 +1005,47 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
               animate={isVisible.product ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.8 }}
               className="order-2 lg:order-1"
+              style={{ y: y3 }}
             >
-              <span className="inline-block bg-gradient-to-r from-emerald-500 to-teal-600 px-4 py-2 rounded-full text-sm font-semibold mb-6">
-                ⚡️ Producto Destacado
-              </span>
-              
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                <span className="bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent">
-                  Facturación Digital
-                </span>
-                <br />
-                <span className="text-white">Eficiente</span>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                FacturIA
               </h2>
-              
-              <p className="text-xl text-gray-200 mb-8 leading-relaxed">
-                Automatizá la generación de facturas electrónicas usando datos desde WhatsApp, 
-                archivos Excel/CSV o plataformas e-commerce. Todo en un solo lugar.
+              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+                Sistema de facturación digital inteligente diseñado específicamente para pequeñas empresas argentinas.
+                Automatizá la generación de facturas electrónicas usando datos desde WhatsApp, archivos Excel/CSV o plataformas e-commerce. Todo en un solo lugar.
               </p>
-
+              
               <div className="space-y-4 mb-8">
                 {[
-                  { icon: <Clock className="w-5 h-5" />, text: "Ahorra hasta 5 horas semanales" },
-                  { icon: <CheckCircle className="w-5 h-5" />, text: "Reduce errores de facturación al 99%" },
-                  { icon: <Target className="w-5 h-5" />, text: "Mayor comodidad y control" },
-                  { icon: <Users className="w-5 h-5" />, text: "Gestión de clientes" }
-                ].map((benefit, index) => (
+                  'Facturación electrónica AFIP',
+                  'Gestión de clientes y productos',
+                  'Reportes y análisis en tiempo real',
+                  'Integración con medios de pago'
+                ].map((feature, index) => (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, x: -20 }}
                     animate={isVisible.product ? { opacity: 1, x: 0 } : {}}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    transition={{ delay: index * 0.1 }}
                     className="flex items-center space-x-3"
                   >
-                    <div className="text-emerald-400">{benefit.icon}</div>
-                    <span className="text-gray-200">{benefit.text}</span>
+                    <CheckCircle className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+                    <span className="text-gray-300">{feature}</span>
                   </motion.div>
                 ))}
               </div>
 
-              <motion.button
-                whileHover={{ scale: 1.02 }}
+              <motion.a
+                href="https://facturia.neurasur.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => scrollToSection('contact')}
-                className="bg-gradient-to-r from-gray-500 to-gray-600 px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 flex items-center cursor-not-allowed opacity-70"
-                disabled
+                className="inline-flex items-center space-x-2 bg-gradient-to-r from-emerald-500 to-teal-600 px-8 py-4 rounded-lg font-semibold hover:shadow-lg hover:shadow-emerald-500/50 transition-all"
               >
-                Próximamente
-              </motion.button>
+                <span>Acceder a FacturIA</span>
+                <ArrowRight className="w-5 h-5" />
+              </motion.a>
             </motion.div>
 
             <motion.div
@@ -1058,7 +1161,7 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
               <div className="space-y-6 mb-8">
                 {[
                   { icon: <Phone className="w-5 h-5 cursor-pointer" onClick={handleWhatsAppClick} />, text: <span className="cursor-pointer" onClick={handleWhatsAppClick}>Contactanos por WhatsApp</span> },
-                  { icon: <Mail className="w-5 h-5 cursor-pointer" onClick={handleEmailClick} />, text:<span className="cursor-pointer" onClick={handleEmailClick}> contact@nextba.com</span>},
+                  { icon: <Mail className="w-5 h-5 cursor-pointer" onClick={handleEmailClick} />, text:<span className="cursor-pointer" onClick={handleEmailClick}>contact@neurasur.com</span>},
                   { icon: <MapPin className="w-5 h-5" />, text: "Buenos Aires, Argentina" }
                 ].map((contact, index) => (
                   <motion.div

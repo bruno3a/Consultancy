@@ -1,0 +1,63 @@
+{
+  "company": {
+    "name": "NeuraSur",
+    "tagline": "Transformación Digital Inteligente para Pymes",
+    "description": "Consultoría digital especializada en automatización, chatbots con IA y transformación digital para pequeñas y medianas empresas en Argentina",
+    "location": "Buenos Aires, Argentina",
+    "founded": "2024",
+    "contact": {
+      "email": "contact@neurasur.com",
+      "phone": "+54-911-7129-9730",
+      "website": "https://www.neurasur.com"
+    }
+  },
+  "services": [
+    {
+      "name": "Chatbots con Inteligencia Artificial",
+      "description": "Desarrollo e implementación de chatbots personalizados con IA para atención al cliente 24/7",
+      "benefits": ["Atención 24/7", "Reducción de costos operativos 60%", "Integración WhatsApp", "Respuestas inteligentes contextuales"],
+      "technologies": ["OpenAI GPT", "n8n", "WhatsApp Business API", "Telegram Bot API", "Gemini"],
+      "use_cases": ["Atención al cliente", "Calificación de leads", "Soporte técnico", "Ventas automatizadas"]
+    },
+    {
+      "name": "Automatización de Procesos",
+      "description": "Eliminación de tareas repetitivas mediante integración de sistemas y workflows inteligentes",
+      "benefits": ["Ahorro de tiempo 70%", "Reducción de errores humanos", "Mayor productividad", "RPA"],
+      "technologies": ["n8n", "Zapier", "Make", "Python", "APIs REST"],
+      "use_cases": ["Sincronización de datos", "Reportes automáticos", "Gestión de emails", "Integración CRM-ERP"]
+    },
+    {
+      "name": "Business Intelligence",
+      "description": "Dashboards interactivos y análisis de datos para decisiones informadas",
+      "benefits": ["Visualización en tiempo real", "Reportes automáticos", "Análisis predictivo", "KPIs personalizados"],
+      "technologies": ["Power BI", "Google Data Studio", "Python", "SQL"],
+      "use_cases": ["Análisis de ventas", "Métricas de marketing", "Control de inventario", "Forecasting"]
+    },
+    {
+      "name": "Desarrollo Web y SEO",
+      "description": "Sitios web modernos optimizados para conversión y posicionamiento",
+      "benefits": ["Diseño responsive", "SEO optimizado", "Alta velocidad", "Conversión mejorada"],
+      "technologies": ["React", "Next.js", "Tailwind CSS", "Vercel"],
+      "use_cases": ["Landing pages", "E-commerce", "Portales corporativos", "Aplicaciones web"]
+    }
+  ],
+  "target_audience": {
+    "primary": "Pymes argentinas con 2-50 empleados",
+    "industries": ["Retail", "Servicios profesionales", "E-commerce", "Salud", "Educación", "Inmobiliarias"],
+    "pain_points": ["Procesos manuales lentos", "Falta de presencia digital", "Atención al cliente limitada", "Datos dispersos sin análisis"]
+  },
+  "competitive_advantages": [
+    "Especialización en pymes argentinas",
+    "Soluciones low-code accesibles",
+    "Implementación rápida (2-4 semanas)",
+    "Soporte en español",
+    "Precios competitivos para el mercado local",
+    "ROI medible y rápido"
+  ],
+  "common_questions": {
+    "pricing": "Planes desde $250 USD/mes según complejidad",
+    "implementation_time": "4-8 semanas para proyectos estándar",
+    "support": "Soporte continuo en español vía WhatsApp y email",
+    "technologies": "Usamos tecnologías modernas y probadas: React, n8n, OpenAI, WhatsApp API"
+  }
+}

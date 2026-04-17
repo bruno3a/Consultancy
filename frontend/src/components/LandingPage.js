@@ -512,22 +512,22 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
         <title>NeuraSur: Consultoría Digital y Chatbots con IA para Pymes</title>
         <meta name="description" content="NeuraSur ofrece consultoría digital experta para pymes en Buenos Aires. Potenciamos tu negocio con automatización, chatbots con IA, desarrollo web y transformación digital." />
         <meta name="keywords" content="consultoría digital pymes, chatbots ia, automatización procesos, transformación digital, desarrollo web, consultoria digital buenos aires, neurasur" />
-        <link rel="canonical" href="https://neurasur.com/" />
+        <link rel="canonical" href="https://www.neurasur.com/" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://neurasur.com/" />
+        <meta property="og:url" content="https://www.neurasur.com/" />
         <meta property="og:title" content="NeuraSur: Consultoría Digital y Chatbots con IA para Pymes" />
         <meta property="og:description" content="Transformación digital para pequeñas empresas con NeuraSur. Ofrecemos chatbots con IA, automatización y consultoría experta." />
-        <meta property="og:image" content="https://neurasur.com/og-image.png" />
+        <meta property="og:image" content="https://www.neurasur.com/og-image.png" />
         <meta property="og:site_name" content="NeuraSur" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://neurasur.com/" />
+        <meta name="twitter:url" content="https://www.neurasur.com/" />
         <meta name="twitter:title" content="NeuraSur: Consultoría Digital y Chatbots con IA para Pymes" />
         <meta name="twitter:description" content="Transformación digital para pequeñas empresas con NeuraSur. Ofrecemos chatbots con IA, automatización y consultoría experta." />
-        <meta name="twitter:image" content="https://neurasur.com/og-image.png" />
+        <meta name="twitter:image" content="https://www.neurasur.com/og-image.png" />
         {/* <meta name="twitter:site" content="@tuUsuarioTwitter" /> */} {/* Descomenta y añade tu usuario de Twitter si tienes */}
         {/* <meta name="twitter:creator" content="@tuUsuarioTwitter" /> */} {/* Descomenta y añade tu usuario de Twitter si tienes */}
 
@@ -538,8 +538,8 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
             "@type": "Organization",
             "name": "NeuraSur",
             "alternateName": "NeuraSur Consultoría Digital",
-            "url": "https://neurasur.com/",
-            "logo": "https://neurasur.com/logo.png",
+            "url": "https://www.neurasur.com/",
+            "logo": "https://www.neurasur.com/logo.png",
             "description": "Consultoría digital especializada en transformación digital para pymes. Ofrecemos chatbots con IA, automatización de procesos, desarrollo web y business intelligence en Buenos Aires, Argentina.",
             "foundingDate": "2024",
             "slogan": "Transformación Digital Inteligente para Pymes",
@@ -589,7 +589,7 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
             "@context": "https://schema.org",
             "@type": "ProfessionalService",
             "name": "NeuraSur - Consultoría Digital para Pymes",
-            "image": "https://neurasur.com/og-image.png",
+            "image": "https://www.neurasur.com/og-image.png",
             "priceRange": "$$",
             "telephone": "+54-911-7129-9730",
             "address": {
@@ -602,7 +602,7 @@ const handleCookieBannerOffsetChange = useCallback((height) => {
               "latitude": "-34.6037",
               "longitude": "-58.3816"
             },
-            "url": "https://neurasur.com/",
+            "url": "https://www.neurasur.com/",
             "hasOfferCatalog": {
               "@type": "OfferCatalog",
               "name": "Servicios de Transformación Digital",

@@ -53,7 +53,6 @@ const PrivacyPolicyPopup = ({ onClose }) => {
         ],
         contactInfo: {
           textBefore: "Para ejercer estos derechos, puede escribir a ",
-          email: "br1trezza@gmail.com", // Kept the provided email
           email: process.env.REACT_APP_CONTACT_EMAIL || "contact@neurasur.com",
           textAfter: "."
         }
